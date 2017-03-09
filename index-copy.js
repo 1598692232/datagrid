@@ -11,7 +11,7 @@
             require("./dataTables.fixedColumns.js")
         );
     } else {
-       factory(window.jQuery);
+        factory(window.jQuery);
     }
 })(function ($) {
     /*ajax重写为source*/
@@ -69,7 +69,7 @@
                     // console.log(_self.everyColsObj);
                     // return totalCols;
                     // return totalColsArgs;
-                // }else{
+                    // }else{
                     _self.allColsObj(v.columns,totalColsArgs,totalCols,k,parentKey==undefined?v.key:parentKey+','+v.key);
                 }
             });
@@ -169,6 +169,7 @@
         handleRows:function(){
             var _self=this;
 
+
             for(var k in _self.everyColsObj){
                 /*获取最大行数*/
                 if(_self.everyColsObj[k].parent==undefined){
@@ -248,10 +249,10 @@
         }
 
         var tableHtml='<table>'+
-                            '<thead>'+
-                             trHtml+
-                            '</thead>'+
-                          '</table>';
+            '<thead>'+
+            trHtml+
+            '</thead>'+
+            '</table>';
         this.ele.html(tableHtml);
 
         // if(opt.keys==undefined||opt.keys.length==0)return;

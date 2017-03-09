@@ -6,8 +6,48 @@
     <link rel="stylesheet" href="../bower_components/pager/index.css" media="screen" title="no title" charset="utf-8">
     <title></title>
   </head>
+  <style>
+    table td{
+      border: 1px solid #666;
+    }
+  </style>
   <body>
     <div class="" id="dt"></div>
+
+    <table>
+      <thead>
+      <tr>
+        <td colspan="9">a</td>
+      </tr>
+      <tr>
+        <td colspan="3">b</td>
+        <td colspan="6">c</td>
+      </tr>
+      <tr>
+        <td colspan="1" rowspan="2">d</td>
+        <td colspan="2">e</td>
+        <td colspan="2">f</td>
+        <td colspan="2">g</td>
+        <td colspan="2">h</td>
+      </tr>
+      <tr>
+
+        <td colspan="1">i</td>
+        <td colspan="1">j</td>
+        <td colspan="1">k</td>
+        <td colspan="1">l</td>
+        <td colspan="1">m</td>
+        <td colspan="1">n</td>
+        <td colspan="1">o</td>
+        <td colspan="1">p</td>
+      </tr>
+      <!--<tr>-->
+        <!--<td colspan="2">d</td>-->
+        <!--<td colspan="1">e</td>-->
+        <!--<td colspan="6">e</td>-->
+      <!--</tr>-->
+      </thead>
+    </table>
     <script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
     <script type="text/javascript" src="../bower_components/class/index.js"></script>
     <script type="text/javascript" src="../bower_components/pager/index.js"></script>
@@ -16,6 +56,165 @@
     <script src="../index.js"></script>
     <script type="text/javascript">
     $(document).ready(function() {
+
+        var dataTables= $("#dt").datagrid({
+            columns: [
+              {
+                key: 'a',
+                label: 'a',
+                className: '',
+                columns: [
+                    {
+                      key: 'b',
+                      label: 'b',
+                      className: '',
+                      columns: [
+                        {
+                          key: 'd',
+                          label: 'd',
+                          className: '',
+                          columns: [
+
+                          ]
+                        },
+                        {
+                          key: 'e',
+                          label: 'e',
+                          className: '',
+                          columns: [
+                            {
+                              key: 'i',
+                              label: 'i',
+                              className: '',
+                              columns: [
+
+                              ]
+                            },
+                            {
+                              key: 'j',
+                              label: 'j',
+                              className: '',
+                              columns: [
+
+                              ]
+                            }
+                          ]
+                        },
+
+                      ]
+                    },
+                    {
+                      key: 'c',
+                      label: 'c',
+                      className: '',
+                      columns: [
+                        {
+                          key: 'f',
+                          label: 'f',
+                          className: '',
+                          columns: [
+                            {
+                              key: 'k',
+                              label: 'k',
+                              className: '',
+                              columns: [
+
+                              ]
+                            },
+                            {
+                              key: 'l',
+                              label: 'l',
+                              className: '',
+                              columns: [
+
+                              ]
+                            }
+
+                          ]
+                        },
+                        {
+                          key: 'g',
+                          label: 'g',
+                          className: '',
+                          columns: [
+                            {
+                              key: 'm',
+                              label: 'm',
+                              className: '',
+                              columns: [
+
+                              ]
+                            },
+                            {
+                              key: 'n',
+                              label: 'n',
+                              className: '',
+                              columns: [
+
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          key: 'h',
+                          label: 'h',
+                          className: '',
+                          columns: [
+                            {
+                              key: 'o',
+                              label: 'o',
+                              className: '',
+                              columns: [
+
+                              ]
+                            },
+                            {
+                              key: 'p',
+                              label: 'p',
+                              className: '',
+                              columns: [
+
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                ]
+              }
+
+            ],
+
+            pagerOptionsFormat: function(data){
+                return {
+                    countPrePage: 50,
+                    total: 100,
+                    perPage: 10
+                }
+            },
+
+            source: {
+                url:"" ,
+                data: {},
+                dataType: 'jsonp',
+                format: function(){
+
+                }
+            },
+
+            itemFormat: function(){
+
+            },
+
+
+            ajax:{
+
+            },
+            abc:""
+
+
+        });
+
 //       $('#example').DataTable( {
 //           scrollY:        300,
 //           scrollX:        true,
@@ -46,47 +245,113 @@
 // }).on('pager:switch', function(event, index){
 //     alert('选择跳转至第' + index + '页');
 // });
-    var dataTables= $("#dt").dataTables({
-        keys:['Name','Position','Office','Extn','Start date','Salary'],
-        pager:"pager"
-      });
-      dataTables.createData({
-        scrollY:        300,
-        scrollX:        true,
-        scrollCollapse: true,
-        paging:         false,
-        fixedColumns:   true,
-//              "columnDefs": [
-//                  {
-//                      "targets": [ 2 ],
-//                      "visible": false,
-//                      "searchable": false
-//                  }
-//              ],
-        "ajax": "objects.json",
-        "columns": [
-            { "data": "name" },
-            { "data": "position" },
-            { "data": "office" },
-            { "data": "extn" },
-            { "data": "start_date" },
-            { "data": "salary" }
-        ]
-    }).createPager({
-      opt:{
-        total: 100,
-        current: 10,
-        showFirstBtn: false
-      },
-      eventName:'pager:switch',
-      eventBack:function(event, index){
-        alert('选择跳转至第' + index + '页');
-      }
-    });
 
-      setTimeout(function(){
-        dataTables.destory();
-      },3000);
+
+//    var dataTables= $("#dt").dataGrid({
+//
+//        pagerOptionsFormat: function(data){
+//            return {
+//                countPrePage: 50,
+//                total: 100,
+//                perPage: 10
+//            }
+//        },
+//        keys:['Name','Position','Office','Extn','Start date','Salary'],
+//        source: {
+//            url:"" ,
+//            data: {},
+//            dataType: 'jsonp',
+//            format: function(){
+//
+//            }
+//        },
+//
+//        itemFormat: function(){
+//
+//        },
+//
+//        columns: [
+//            {
+//                key: '',
+//                label: '',
+//                className: '',
+//                columns: [
+//                ]
+//            }
+//        ],
+//        dataTable{
+//            /*dataTable配置*/
+//            scrollY:        300,
+//            scrollX:        true,
+//            scrollCollapse: true,
+//            paging:         false,
+//            fixedColumns:   true,
+//            //              "columnDefs": [
+//            //                  {
+//            //                      "targets": [ 2 ],
+//            //                      "visible": false,
+//            //                      "searchable": false
+//            //                  }
+//            //              ],
+////            "ajax": {
+////                "url": "./objects.json",
+////                //默认为data,这里定义为空，则只需要传不带属性的数据
+////                "data": {
+////                    iPager:"1231231"
+////                },
+//////                success:function(data){
+//////                    console.log(data);
+//////
+//////                }
+////            },
+////            "columns": [
+////                { "data": "name" },
+////                { "data": "position" },
+////                { "data": "office" },
+////                { "data": "extn" },
+////                { "data": "start_date" },
+////                { "data": "salary" }
+////            ]
+//        },
+//
+//      });
+//        .setSourceRequestOptions()
+//        .setPagerOptionsFormat()
+//                .refresh()
+//                .loadData()
+//            .on('request:success', function(){
+//
+//            })
+//            .on('request:complete', function(){
+//
+//            })
+//            .on('request:error', function(){
+//
+//            })
+//
+//            .success(function(){
+//                format(data);
+//                self.trigger('request:success', data);
+//            })
+//            .complete()
+//            .error()
+//      dataTables.createData({
+//
+//    }).createPager({
+//      opt:{
+//        total: 100,
+//        current: 10,
+//        showFirstBtn: false
+//      },
+//      eventName:'pager:switch',
+//      eventBack:function(event, index){
+//        alert('选择跳转至第' + index + '页');
+//      }
+//    });
+
+//      setTimeout(function(){
+//        dataTables.destory();
+//      },3000);
 
 
   });

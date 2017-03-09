@@ -1,0 +1,249 @@
+columns: [
+{
+key: 'a',
+label: 'a',
+className: '',
+columns: [
+{
+key: 'b',
+label: 'b',
+className: '',
+columns: [
+{
+key: 'd',
+label: 'd',
+className: '',
+columns: [
+
+]
+},
+{
+key: 'e',
+label: 'e',
+className: '',
+columns: [
+{
+key: 'i',
+label: 'i',
+className: '',
+columns: [
+
+]
+},
+{
+key: 'j',
+label: 'j',
+className: '',
+columns: [
+
+]
+}
+]
+},
+
+]
+},
+{
+key: 'c',
+label: 'c',
+className: '',
+columns: [
+{
+key: 'f',
+label: 'f',
+className: '',
+columns: [
+{
+key: 'k',
+label: 'k',
+className: '',
+columns: [
+
+]
+},
+{
+key: 'l',
+label: 'l',
+className: '',
+columns: [
+
+]
+}
+
+]
+},
+{
+key: 'g',
+label: 'g',
+className: '',
+columns: [
+{
+key: 'm',
+label: 'm',
+className: '',
+columns: [
+
+]
+},
+{
+key: 'n',
+label: 'n',
+className: '',
+columns: [
+
+]
+}
+]
+},
+{
+key: 'h',
+label: 'h',
+className: '',
+columns: [
+{
+key: 'o',
+label: 'o',
+className: '',
+columns: [
+
+]
+},
+{
+key: 'p',
+label: 'p',
+className: '',
+columns: [
+
+]
+}
+]
+}
+]
+}
+]
+}
+
+],
+
+
+
+
+columns: [
+{
+key: '1',
+label: '用户名',
+className: '',
+columns: [
+{
+key: '11',
+label: '大名',
+className: '',
+columns: [
+{
+key: '111',
+label: '大名1',
+className: '',
+columns: []
+},
+{
+key: '112',
+label: '大名2',
+className: '',
+columns: []
+},
+{
+key: '113',
+label: '大名3',
+className: '',
+columns: []
+}
+]
+},
+{
+key: '12',
+label: '小名',
+className: '',
+columns: [
+{
+key: '121',
+label: '小名1',
+className: '',
+columns: []
+}
+]
+},
+]
+},
+{
+key: '7',
+label: '性别',
+className: '',
+columns: [
+{
+key: '71',
+label: '性别1',
+className: '',
+columns: [
+{
+key: '711',
+label: '性别11',
+className: '',
+columns: []
+},
+{
+key: '712',
+label: '性别12',
+className: '',
+columns: [
+{
+key: '7121',
+label: '性别121',
+className: '',
+columns: [
+
+]
+},
+{
+key: '7122',
+label: '性别122',
+className: '',
+columns: [
+{
+key: '71221',
+label: '性别12221',
+className: '',
+columns: [
+
+]
+},
+{
+key: '71222',
+label: '性别12222',
+className: '',
+columns: [
+
+]
+},
+]
+},
+]
+},
+]
+},
+{
+key: '72',
+label: '性别2',
+className: '',
+columns: [
+{
+key: '721',
+label: '性别21',
+className: '',
+columns: []
+}
+]
+},
+]
+}
+
+],
