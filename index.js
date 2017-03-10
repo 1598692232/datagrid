@@ -27,8 +27,8 @@
         group:[],         /*中间转换对象group*/
         group2:[],
         // finalArgs:{},
-        rowIndexArgs:[],  /*tr的键值*/
-        trArgs:{},    /*z最终渲染的tr的对象*/
+        rowIndexArgs:{},  /*最终渲染的tr的对象*/
+        // trArgs:[],    /*z最终渲染的tr的对象*/
         maxTrLength:0,    /*最大行数*/
         /*过滤不必要的字段*/
         filter:function (fields){
@@ -127,13 +127,42 @@
 
             _self.handleRows();
             console.log(_self.group,_self.maxTrLength,7777);
-            // _self.handleGroupToTrGroup();
+            _self.handleGroupToTrGroup();
             // console.log(_self.rowIndexArgs,555);
             console.log(_self.trArgs,222222);
         },
 
         /*TODO::将数组重组为需要的结构*/
         handleGroupToTrGroup:function(){
+            var _self=this,typeRowIndexArgs=[];
+
+
+
+            for(var k in _self.group2){
+                for (var i in  _self.group2[k]){
+                    if(typeRowIndexArgs.indexOf(_self.group2[k][i].rowIndex)<0){
+                        typeRowIndexArgs.push(_self.group2[k][i].rowIndex);
+                    }
+                }
+            }
+
+
+            typeRowIndexArgs.sort();
+            console.log(typeRowIndexArgs,123456);
+
+            typeRowIndexArgs.forEach(function(v,k){
+                _self.rowIndexArgs[v]=[];
+                for(var k in _self.group2){
+                    for (var i in  _self.group2[k]){
+                        if( _self.group2[k][i].rowIndex==v){
+                            _self.rowIndexArgs[v].push(_self.group2[k][i]);
+                        }
+                    }
+                }
+            });
+            console.log(_self.rowIndexArgs,6464677);
+
+
             // var _self=this;
             //
             // for(var i in _self.group){
@@ -192,19 +221,43 @@
                 }
             }
             console.log(o1,757575);
+            /*一级分类计算maxCol*/
             for(var i in o1){
-
                 for(var m in o1[i]){
-                    if(m!="attr"){
-                        if(o1[i][m].length==0){
-                            o1[i].attr.maxCol++;
-                        }
-                    }
 
+                    if(m!="attr"&&o1[i][m].length==0){
+
+                        o1[i].attr.maxCol++;
+
+                    }
 
                 }
             }
-            // console.log(o1,868686);
+
+            /*非一级分类计算maxCol*/
+            for(var i in o1){
+                for(var m in o1[i]){
+                    if(o1[i][m].parent!=undefined){
+
+                        var key=o1[i][m].key;
+
+                        for(var k in o1){
+                            for(var j in o1[k]){
+                                if(o1[k][j].parent!=undefined){
+                                    var parentsArgs=o1[k][j].parent.split(",");
+                                    if(parentsArgs.indexOf(key)>-1&&o1[k][j].length==0){
+                                        o1[i][m].maxCol+=1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+            console.log(o1,987987987);
             _self.group2=o1;
 
 
@@ -217,6 +270,11 @@
             //     //     // }
             //     // }
             // }
+        },
+
+
+        getCols:function(){
+
         },
 
         /*获取第几行和跨行几行*/
@@ -270,7 +328,12 @@
                     // } else {
                     //     _self.group2[k][m].maxRow = 1;
                     // }
-                    _self.group2[k][m].maxRow = _self.maxTrLength - _self.group2[k][m].rowIndex + 1;
+                    if(_self.group2[k][m].length == 0){
+                        _self.group2[k][m].maxRow = _self.maxTrLength - _self.group2[k][m].rowIndex+1 ;
+                    }else{
+                        _self.group2[k][m].maxRow = 1;
+                    }
+
                 }
             }
             console.log( _self.group2,987654)
@@ -303,7 +366,7 @@
         dtValidate.handleEveryColsObj(_self.opt.column);
         this.newOpt.everyColsObj=dtValidate.everyColsObj;
         console.log(this.newOpt.everyColsObj,646464);
-        this.opt.newColumns=dtValidate.trArgs;
+        this.opt.newColumns=dtValidate.rowIndexArgs;
         console.log(this.opt.newColumns);
         // console.log(this.opt.newColumns,8989);
         this.init(this.ele,this.opt);

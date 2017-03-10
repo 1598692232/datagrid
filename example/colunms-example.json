@@ -130,29 +130,29 @@ columns: [
 
 columns: [
 {
-key: '1',
+key: 'ooewoir',
 label: '用户名',
 className: '',
 columns: [
 {
-key: '11',
+key: '736',
 label: '大名',
 className: '',
 columns: [
 {
-key: '111',
+key: '546',
 label: '大名1',
 className: '',
 columns: []
 },
 {
-key: '112',
+key: '243',
 label: '大名2',
 className: '',
 columns: []
 },
 {
-key: '113',
+key: '938',
 label: '大名3',
 className: '',
 columns: []
@@ -160,13 +160,19 @@ columns: []
 ]
 },
 {
-key: '12',
+key: '726',
 label: '小名',
 className: '',
 columns: [
 {
-key: '121',
+key: '637',
 label: '小名1',
+className: '',
+columns: []
+},
+{
+key: '928',
+label: '小名2',
 className: '',
 columns: []
 }
@@ -175,7 +181,7 @@ columns: []
 ]
 },
 {
-key: '7',
+key: 'adsdasd',
 label: '性别',
 className: '',
 columns: [
