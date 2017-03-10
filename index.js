@@ -14,9 +14,7 @@
        factory(window.jQuery);
     }
 })(function ($) {
-    /*ajax重写为source*/
-    const CAN_FIELDS=['columns','pagerOptionsFormat','source','itemFormat',
-        'fixedColumns','columnDefs'];
+
 
     /*为datagrid提供方法*/
     var dtValidate={
@@ -25,7 +23,7 @@
         everyColsObj:[],    /*获取columns的每个对象属性*/
         // ceng:0,
         group:[],         /*中间转换对象group*/
-        group2:[],
+        group2:[],        /*中间转换对象group*/
         // finalArgs:{},
         rowIndexArgs:{},  /*最终渲染的tr的对象*/
         // trArgs:[],    /*z最终渲染的tr的对象*/
@@ -64,19 +62,11 @@
                     maxRow:0
                 };
 
-                // _self.everyColsObj[v.key]=obj;
 
                 _self.everyColsObj.push(obj);
 
 
                 if(v.columns!=undefined&&v.columns instanceof Array&&v.columns.length>0){
-                    // ++totalCols;
-                    // totalColsArgs[final]=totalCols;
-                    // console.log( _self.colsObj,_self.everyColsObj,_self.allColsArgs);
-                    // console.log(_self.everyColsObj);
-                    // return totalCols;
-                    // return totalColsArgs;
-                // }else{
                     _self.allColsObj(v.columns,totalColsArgs,totalCols,k,parentKey==undefined?v.key:parentKey+','+v.key);
                 }
             });
@@ -118,13 +108,6 @@
 
             }
 
-            /*增加label*/
-            // for(var k in _self.everyColsObj){
-            //     _self.group[k].label=_self.everyColsObj[k].label;
-            //     _self.group[k].className=_self.everyColsObj[k].className;
-            //     _self.group[k].key=_self.everyColsObj[k].key;
-            // }
-
             _self.handleRows();
             console.log(_self.group,_self.maxTrLength,7777);
             _self.handleGroupToTrGroup();
@@ -163,26 +146,6 @@
             console.log(_self.rowIndexArgs,6464677);
 
 
-            // var _self=this;
-            //
-            // for(var i in _self.group){
-            //     // console.log(_self.group[i].attr);
-            //     if(_self.rowIndexArgs.indexOf(_self.group[i].attr.rowIndex)<0){
-            //         _self.rowIndexArgs.push(_self.group[i].attr.rowIndex);
-            //     }
-            // }
-            //
-            // // trArgs
-            // console.log(_self.rowIndexArgs,333);
-            // _self.rowIndexArgs.forEach(function(v,k){
-            //     _self.trArgs[v]=[];
-            //     for (var m in  _self.group){
-            //         // console.log(_self.group[m].length,555)
-            //         if(_self.group[m].attr.rowIndex==v){
-            //             _self.trArgs[v].push(_self.group[m].attr);
-            //         }
-            //     }
-            // })
 
         },
 
@@ -260,21 +223,6 @@
             console.log(o1,987987987);
             _self.group2=o1;
 
-
-            // for(var i in _self.group){
-            //
-            //     _self.group[i].maxCol=0;
-            //     // for(var m in _self.group[i]){
-            //     //     // if(m!='attr'){
-            //             _self.group[i].maxCol=_self.group[i].length==0?++_self.group[i].maxCol:_self.group[i].maxCol;
-            //     //     // }
-            //     // }
-            // }
-        },
-
-
-        getCols:function(){
-
         },
 
         /*获取第几行和跨行几行*/
@@ -295,9 +243,6 @@
                     }
                 }
 
-
-
-
             }
 
             /*获取处于第几个tr*/
@@ -314,7 +259,6 @@
                 }
             }
 
-
             console.log(_self.maxTrLength,858483);
             console.log(_self.group2,83748575643);
 
@@ -323,11 +267,6 @@
             for(var k in _self.group2){
                 for(var m in _self.group2[k]) {
 
-                    // if (_self.group2[k][m].length == 0) {
-                    //     _self.group2[k][m].maxRow = _self.maxTrLength - _self.group2[k][m].rowIndex + 1;
-                    // } else {
-                    //     _self.group2[k][m].maxRow = 1;
-                    // }
                     if(_self.group2[k][m].length == 0){
                         _self.group2[k][m].maxRow = _self.maxTrLength - _self.group2[k][m].rowIndex+1 ;
                     }else{
@@ -336,10 +275,33 @@
 
                 }
             }
-            console.log( _self.group2,987654)
+            console.log( _self.group2,987654);
 
+        },
+
+        // /*深克隆对象*/
+        // cloneCurrentObj:function (obj1,obj2) {
+        //     var _self=this,obj2=obj2||{};
+        //     for(var i in obj1){
+        //         if(typeof obj1[i] == "object"){
+        //             obj2[i]=(obj1[i].constructor==Array)?[]:{};
+        //             _self.cloneCurrentObj(obj1[i],obj2[i]);
+        //         }else{
+        //             obj2[i]=obj1[i];
+        //         }
+        //     }
+        //     return obj2;
+        // },
+
+        /*使用完毕初始化*/
+        dtValidateDestory:function(){
+            this. colsObj={};
+            this.everyColsObj=[];
+            this.group=[];
+            this.group2=[];
+            this.rowIndexArgs={};
+            this.maxTrLength=0;
         }
-
 
     };
 
@@ -364,13 +326,24 @@
         dtValidate.allColsObj(_self.opt.columns,_self.opt.totalColsArgs,_self.opt.totalCols);
 
         dtValidate.handleEveryColsObj(_self.opt.column);
-        this.newOpt.everyColsObj=dtValidate.everyColsObj;
-        console.log(this.newOpt.everyColsObj,646464);
-        this.opt.newColumns=dtValidate.rowIndexArgs;
-        console.log(this.opt.newColumns);
-        // console.log(this.opt.newColumns,8989);
-        this.init(this.ele,this.opt);
-            // .createDataTable(ele,this.opt.dataTable,this.newOpt,option);
+
+        // this.newOpt.everyColsObj=dtValidate.everyColsObj;
+
+        /*深克隆*/
+        this.newOpt.everyColsObj = JSON.parse(JSON.stringify(dtValidate.everyColsObj));
+
+        // this.opt.newColumns=dtValidate.rowIndexArgs;
+
+        /*深克隆*/
+        this.opt.newColumns = JSON.parse(JSON.stringify(dtValidate.rowIndexArgs));
+
+        dtValidate.dtValidateDestory();
+
+        console.log(dtValidate.rowIndexArgs,this.opt.newColumns,"memeda");
+
+        this.init(this.ele,this.opt)
+            .createDataTable(ele,this.opt.dataTable,this.newOpt,option);
+            // .createPager(this.ele,this.opt);
         // this.init(ele,this.opt).createData(ele,this.opt).createPager(ele,this.opt);
     };
 
@@ -384,7 +357,7 @@
         for(var k in defo.newColumns){
             var tr="<tr>";
             defo.newColumns[k].forEach(function(v,m){
-                tr+="<td colspan='"+ v.maxCol+"' rowspan='"+v.maxRow+"'>"+v.label+"</td>";
+                tr+="<td colspan='"+ v.maxCol+"' rowspan='"+v.maxRow+"' class='"+v.className+"'>"+v.label+"</td>";
             });
             tr+="</tr>";
             trHtml+=tr;
@@ -398,19 +371,25 @@
                         '<div id="pager"></div>';
         console.log(ele);
         ele.html(tableHtml);
-
+        /*初始化dtValidate对象属性，方便创建第二个table*/
+        // dtValidate.dtValidateDestory();
+        console.log(this.opt.newColumns,"memeda");
+        // console.log(this.newOpt.newColumns,"mememda")
         return this;
 
     };
+
+    /*ajax重写为source*/
+    const CAN_FIELDS=['columns','pagerOptionsFormat','source','itemFormat',
+        'fixedColumns','columnDefs','aoColumns','fnServerParams'];
 
     /*dataTable初始化*/
     dg.createDataTable=function(ele,dt,opt){
         console.log(ele.find("table"),333);
         var _self=this;
-        var columns=opt.columns;
+        // var columns=opt.columns;
         delete opt.columns;
-        console.log(columns);
-        console.log(opt);
+
         var dtDefaultOpt={
             scrollX:true,
             paging:false,
@@ -422,54 +401,66 @@
         for(var k in opt.everyColsObj){
             if(opt.everyColsObj[k].length==0){
                 var obj={
-                    data:opt.everyColsObj[k].key
+                    "data":opt.everyColsObj[k].key
                 };
                 dtDefaultOpt.columns.push(obj);
             }
-            // console.log(dtDefaultOpt.columns[0]);
         }
 
-
+        /*将自定于方法赋予dataTable*/
         dtDefaultOpt.ajax.url=opt.source.ajaxUrl;
         dtDefaultOpt.ajax.data=opt.source.requestData;
-        // dtDefaultOpt.ajax.success=opt.source.format;
-
+        dtDefaultOpt.ajax.dataSrc=opt.source.dataSrc;
+        dtDefaultOpt.aoColumns=opt.source.itemFormat;
+        dtDefaultOpt.fnServerParams=function(aoData){
+            for(var k in opt.source.requestData){
+                var obj={name:k,value:opt.source.requestData[k]};
+                aoData.push(obj);
+            }
+        }
 
         console.log(dtDefaultOpt,6565);
 
-        // var dtOptions=$.extend({},opt,dtDefaultOpt);
         dtDefaultOpt.columns.forEach(function(v,k){
             console.log(v);
             delete v.mData;
         });
+
         dt=ele.find("table").DataTable(dtDefaultOpt);
     };
 
-    //完全使用dataTable插件
-    // dg.createData=function(ele,opt){
-    //     opt.dg=ele.find("table").DataTable(opt.dataTable);
-    //     return this;
-    // };
+    /*创建页面*/
+    dg.createPager=function(ele,opt){
+        $("#pager").pager({
+            total: opt.dg ? opt.dg.column( 3 ).data().length/10:1,
+            current: opt.current,
+            showFirstBtn: false
+        }).on("pager:switch", function(event, index){
+            opt.dataTable.ajax.data.iPager=index;
+            opt.current=index;
+            dg.destory(ele);
+            dg.init(ele,opt).createData(ele,opt).createPager(ele,opt);
+        });
+    };
 
     // //创建页码
     /*页面参数iPager定死*/
     // dg.createPager=function(ele,opt){
-    //     var ajaxOptions = this.options.ajax;
-    //
-    //     ajaxOptions.success = function(){
-    //
-    //     };
-    //
-    //     if(ajaxOptions.success){
-    //         var old = ajaxOptions.success;
-    //         ajaxOptions.success = function(){
-    //             var res = old();
-    //             xxx;
-    //         };
-    //     }
-    //
-    //     dataField
-    //
+        // var ajaxOptions = this.options.ajax;
+
+        // ajaxOptions.success = function(){
+        //
+        // };
+        //
+        // if(ajaxOptions.success){
+        //     var old = ajaxOptions.success;
+        //     ajaxOptions.success = function(){
+        //         var res = old();
+        //         xxx;
+        //     };
+        // }
+
+
     //     setTimeout(function(){
     //         $("#"+opt.pager).pager({
     //             total: opt.dg ? opt.dg.column( 3 ).data().length/10:1,

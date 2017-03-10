@@ -13,6 +13,7 @@
   </style>
   <body>
     <div class="" id="dt"></div>
+    <!--<div class="" id="dt2"></div>-->
 
     <table>
       <thead>
@@ -60,30 +61,35 @@
         var dataTables= $("#dt").datagrid({
           columns: [
             {
-              key: 'jadlkj',
-              label: 'a',
+              key: 'username',
+              label: '用户名',
               className: '',
               columns: []
             },
             {
-              key: 'pwppe',
-              label: 'a',
+              key: 'sex',
+              label: '性别',
               className: '',
               columns: []
             },
             {
-              key: 'eerrer',
-              label: 'a',
+              key: 'oldAge',
+              label: '周岁',
               className: '',
               columns: []
             },
             {
-              key: 'ttt',
-              label: 'a',
+              key: 'newAge',
+              label: '虚岁',
               className: '',
               columns: []
             },
-
+            {
+              key: 'tizhong',
+              label: '体重',
+              className: '',
+              columns: []
+            },
           ],
 
           //           scrollY:        300,
@@ -91,6 +97,8 @@
 //           scrollCollapse: true,
 //           paging:         false,
 //           fixedColumns:   true,
+//          "bProcessing": true,
+//          "bServerSide": true,
             pagerOptionsFormat: function(data){
                 return {
                     countPrePage: 50,
@@ -102,21 +110,44 @@
             source: {
                 ajaxUrl:"./a.json" ,
                 requestData: {
-                  a:"qeqwe"
+                  a:"qeqwe",
+                  id:"555",
+                  name:"55kai",
+                  iPage:4
                 },
-                format: function(){
-
-                }
-            },
-
-            itemFormat: function(){
-
+                dataSrc:"data.aData",
+                itemFormat:[
+                      { "data": function (obj) {
+                        return '<span>'+obj.username+'</span>';
+                      }
+                  },
+                  { "data": "sex" },
+                  { "data": "oldAge" },
+                  { "data": "newAge" },
+                  { "data": "tizhong"}
+                ]
             }
 
 
         });
 
-//       $('#example').DataTable( {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      //       $('#example').DataTable( {
 //           scrollY:        300,
 //           scrollX:        true,
 //           scrollCollapse: true,
