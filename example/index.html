@@ -108,9 +108,7 @@
                     perPage: 10
                 }
             },
-//          dataTotal:100,
-          "bProcessing": true,
-          "bServerSide": true,
+
             source: {
                 ajaxUrl:"./a.json" ,
                 requestData: {
@@ -120,6 +118,7 @@
                   iPage:4
                 },
                 dataSrc:"data.aData",
+                dataTotal:"data.iTotal",
                 itemFormat:[
                       { "data": function (obj) {
                         return '<span>'+obj.username+'</span>';

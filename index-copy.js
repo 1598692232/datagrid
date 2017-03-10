@@ -106,11 +106,9 @@
             _self.handleGroupToTrGroup();
         },
 
-        /*TODO::将数组重组为需要的结构*/
+        /*将数组重组为需要的结构*/
         handleGroupToTrGroup:function(){
             var _self=this,typeRowIndexArgs=[];
-
-
 
             for(var k in _self.group2){
                 for (var i in  _self.group2[k]){
@@ -299,7 +297,8 @@
             newColumns:"",
             dataTable:"",
             aoData:[],
-            beginOption:option
+            beginOption:option,
+            ds:''
         };
 
         this.newOpt=dtValidate.filter.call(this,option);
@@ -359,7 +358,7 @@
 
     /*ajax重写为source*/
     const CAN_FIELDS=['columns','pagerOptionsFormat','source','itemFormat',
-        'fixedColumns','columnDefs','aoColumns','scrollY','scrollX','pagerOptionsFormat'];
+        'fixedColumns','columnDefs','aoColumns','scrollY','scrollX','pagerOptionsFormat','dataTotal'];
 
     /*dataTable初始化*/
     dg.createDataTable=function(ele,dt,opt){
@@ -372,12 +371,13 @@
         }
 
         opt.dtDefaultOpt={
-            scrollX:true,
+            // scrollX:true,
             paging:false,
             scrollCollapse: true,
             columns:[],
             ajax:{},
             searching: false,
+            destroy:true
         };
 
         var dtDefaultOpt=opt.dtDefaultOpt;
@@ -391,7 +391,6 @@
         }
 
 
-        // opt.aoData=[];
         /*将自定于方法赋予dataTable*/
         dtDefaultOpt.ajax.url=opt.source.ajaxUrl;
         dtDefaultOpt.ajax.data=opt.source.requestData;
@@ -401,8 +400,6 @@
         dtDefaultOpt.scrollY=opt.scrollY;
         dtDefaultOpt.scrollX=opt.scrollX;
         // dtDefaultOpt.scrollCollapse=true;
-        // dtDefaultOpt.bProcessing=opt.source.bProcessing;
-        // dtDefaultOpt.bServerSide=opt.source.bServerSide;
         dtDefaultOpt.fnServerParams=function(aoData){
             for(var k in opt.source.requestData){
                 var obj={name:k,value:opt.source.requestData[k]};
@@ -415,34 +412,38 @@
             delete v.mData;
         });
 
-        ele.css({display:"none"});
+        // ele.css({display:"none"});
         dt=ele.find("table").DataTable(dtDefaultOpt);
-        this.createPager(ele,dt,opt);
+        // var api = new $.fn.dataTable.Api( destory );
+
         $(".dataTables_info").remove();
+
+        var beginOption=opt.beginOption,
+            source=opt.beginOption.source;
+        dt.on( 'xhr', function () {
+
+            var page=beginOption.pagerOptionsFormat();/*获取页数属性*/
+            var json = dt.ajax.json();
+            var dataTotal=eval('json.'+source.dataTotal);
+            _self.createPager(ele,dt,opt,page,dataTotal);
+
+        } );
+
+
         return this;
     };
 
     /*创建页面*/
-    dg.createPager=function(ele,dt,opt){
+    dg.createPager=function(ele,dt,opt,page,dataTotal){
         var beginOption=opt.beginOption,
             source=opt.beginOption.source;
-        console.log(source,888);
-        console.log(opt.pagerOptionsFormat().total/ opt.pagerOptionsFormat().perPage,8999);
-
-        var page=beginOption.pagerOptionsFormat();/*获取页数属性*/
 
         $("#pager").pager({
-            total: page.total/page.perPage,
+            // total: page.total/page.perPage,
+            total: dataTotal/page.perPage,
             current: source.requestData.iPage? source.requestData.iPage:1,
             showFirstBtn: false
         }).on("pager:switch", function(event, index){
-
-            source.dataSrc=function(json){
-
-                page.total=json.data.iTotal?json.data.iTotal:0; /*iTotal为后端传过来字段*/
-
-                return json.data.aData;   /*aData为后端传过来字段*/
-            };
 
             beginOption.pagerOptionsFormat=function () {
                 return {
@@ -461,7 +462,7 @@
             dg.initliaze(ele,beginOption);
 
         });
-        ele.css({display:"block"});
+        // ele.css({display:"block"});
 
     };
 
