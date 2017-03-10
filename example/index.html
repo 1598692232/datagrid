@@ -90,13 +90,19 @@
               className: '',
               columns: []
             },
+            {
+              key:"do",
+              label: '操作',
+              className: '',
+              columns: []
+            },
           ],
 
-          //           scrollY:        300,
-//           scrollX:        true,
-//           scrollCollapse: true,
+           scrollY:        300,
+           scrollX:        true,
+           scrollCollapse: true,
 //           paging:         false,
-//           fixedColumns:   true,
+           fixedColumns:   true,
 //          "bProcessing": true,
 //          "bServerSide": true,
             pagerOptionsFormat: function(data){
@@ -106,7 +112,9 @@
                     perPage: 10
                 }
             },
-
+//          dataTotal:100,
+          "bProcessing": true,
+          "bServerSide": true,
             source: {
                 ajaxUrl:"./a.json" ,
                 requestData: {
@@ -115,7 +123,11 @@
                   name:"55kai",
                   iPage:4
                 },
-                dataSrc:"data.aData",
+                dataSrc:function(json){
+                  console.log(json,"rrrr");
+
+                  return json.data.aData;
+                },
                 itemFormat:[
                       { "data": function (obj) {
                         return '<span>'+obj.username+'</span>';
@@ -124,7 +136,11 @@
                   { "data": "sex" },
                   { "data": "oldAge" },
                   { "data": "newAge" },
-                  { "data": "tizhong"}
+                  { "data": "tizhong"},
+                  { "data": function () {
+                    return '<a data-toggle="modal" data-target="#myModal"  data-title="1"  class="btn btn-success" href="#"><i class="icon-edit icon-white"></i>修改</a>' +'&nbsp;&nbsp;'+'<a   data-title="2"  class="btn btn-danger" href="#"><i class="icon-user icon-white"></i>删除</a>';
+                  }}
+
                 ]
             }
 
