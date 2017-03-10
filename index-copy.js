@@ -19,14 +19,10 @@
     /*为datagrid提供方法*/
     var dtValidate={
         colsObj:{},  /*每列对象*/
-        // allColsArgs:{},
         everyColsObj:[],    /*获取columns的每个对象属性*/
-        // ceng:0,
         group:[],         /*中间转换对象group*/
         group2:[],        /*中间转换对象group*/
-        // finalArgs:{},
         rowIndexArgs:{},  /*最终渲染的tr的对象*/
-        // trArgs:[],    /*z最终渲染的tr的对象*/
         maxTrLength:0,    /*最大行数*/
         /*过滤不必要的字段*/
         filter:function (fields){
@@ -62,9 +58,7 @@
                     maxRow:0
                 };
 
-
                 _self.everyColsObj.push(obj);
-
 
                 if(v.columns!=undefined&&v.columns instanceof Array&&v.columns.length>0){
                     _self.allColsObj(v.columns,totalColsArgs,totalCols,k,parentKey==undefined?v.key:parentKey+','+v.key);
@@ -88,16 +82,16 @@
         /*将everyColsObj整合成分离对象，方便构建tr/td*/
         handleEveryColsObj:function(columns){
             var _self=this;
-            console.log(_self.everyColsObj,434343);
+
             /*得到总列数*/
             for(var k in _self.everyColsObj){
                 // _self.group[k]=[];
                 _self.group.push(_self.everyColsObj[k]);
             }
-            console.log(_self.everyColsObj,54545);
+
             _self.handleCols();
 
-            console.log(_self.group2,868686);
+
             /*将maxCol最小赋予1*/
             for(var m in _self.group2){
                 for(var k in _self.group2[m]){
@@ -109,10 +103,7 @@
             }
 
             _self.handleRows();
-            console.log(_self.group,_self.maxTrLength,7777);
             _self.handleGroupToTrGroup();
-            // console.log(_self.rowIndexArgs,555);
-            console.log(_self.trArgs,222222);
         },
 
         /*TODO::将数组重组为需要的结构*/
@@ -129,9 +120,7 @@
                 }
             }
 
-
             typeRowIndexArgs.sort();
-            console.log(typeRowIndexArgs,123456);
 
             typeRowIndexArgs.forEach(function(v,k){
                 _self.rowIndexArgs[v]=[];
@@ -143,9 +132,6 @@
                     }
                 }
             });
-            console.log(_self.rowIndexArgs,6464677);
-
-
 
         },
 
@@ -161,7 +147,6 @@
                 }
             }
 
-            console.log(parentArgs,6655);
             var o1={};
 
             for(var k in parentArgs) {
@@ -183,7 +168,7 @@
 
                 }
             }
-            console.log(o1,757575);
+
             /*一级分类计算maxCol*/
             for(var i in o1){
                 for(var m in o1[i]){
@@ -217,10 +202,6 @@
                     }
                 }
             }
-
-
-
-            console.log(o1,987987987);
             _self.group2=o1;
 
         },
@@ -259,11 +240,7 @@
                 }
             }
 
-            console.log(_self.maxTrLength,858483);
-            console.log(_self.group2,83748575643);
-
             /*获取跨行*/
-            console.log(_self.everyColsObj,9999);
             for(var k in _self.group2){
                 for(var m in _self.group2[k]) {
 
@@ -275,7 +252,6 @@
 
                 }
             }
-            console.log( _self.group2,987654);
 
         },
 
@@ -349,16 +325,13 @@
 
         dtValidate.dtValidateDestory();
 
-        console.log(dtValidate.rowIndexArgs,this.opt.newColumns,"memeda");
 
         this.init(this.ele,this.dataTable,this.opt);
 
     };
 
-
     // 表头初始化
     dg.init=function(ele,dt,defo){
-        console.log(defo,"ueueu");
         var _self=this,
             trHtml="";
 
@@ -377,12 +350,8 @@
             '</thead>'+
             '</table>'+
             '<div id="pager"></div>';
-        console.log(ele);
         ele.html(tableHtml);
-        /*初始化dtValidate对象属性，方便创建第二个table*/
-        // dtValidate.dtValidateDestory();
-        // console.log(this.opt.newColumns,"memeda");
-        // console.log(this.newOpt.newColumns,"mememda")
+
         this.createDataTable(ele,dt,defo);
         return this;
 
@@ -394,7 +363,7 @@
 
     /*dataTable初始化*/
     dg.createDataTable=function(ele,dt,opt){
-        console.log(opt,333);
+
         var _self=this;
 
         /*防止与dataTable属性冲突*/
@@ -441,36 +410,48 @@
             }
         };
 
-        console.log(dtDefaultOpt,6565);
-
         dtDefaultOpt.columns.forEach(function(v,k){
-            console.log(v);
+
             delete v.mData;
         });
 
+        ele.css({display:"none"});
         dt=ele.find("table").DataTable(dtDefaultOpt);
         this.createPager(ele,dt,opt);
+        $(".dataTables_info").remove();
         return this;
     };
 
     /*创建页面*/
     dg.createPager=function(ele,dt,opt){
-        var beginOption=opt.beginOption,source=opt.beginOption.source;
+        var beginOption=opt.beginOption,
+            source=opt.beginOption.source;
+        console.log(source,888);
+        console.log(opt.pagerOptionsFormat().total/ opt.pagerOptionsFormat().perPage,8999);
+
+        var page=beginOption.pagerOptionsFormat();/*获取页数属性*/
 
         $("#pager").pager({
-            total: opt.pagerOptionsFormat().total/ opt.pagerOptionsFormat().perPage,
+            total: page.total/page.perPage,
             current: source.requestData.iPage? source.requestData.iPage:1,
             showFirstBtn: false
         }).on("pager:switch", function(event, index){
-            console.log(opt.dtDefaultOpt);
-            var page=beginOption.pagerOptionsFormat();
+
+            source.dataSrc=function(json){
+
+                page.total=json.data.iTotal?json.data.iTotal:0; /*iTotal为后端传过来字段*/
+
+                return json.data.aData;   /*aData为后端传过来字段*/
+            };
+
             beginOption.pagerOptionsFormat=function () {
                 return {
-                    countPrePage: index,
+                    countPrePage: page.countPrePage,
                     total:  page.total,
                     perPage:  page.perPage
                 }
             };
+
             opt.dtDefaultOpt.iPager=index;
 
             source.requestData.iPage=index;
@@ -480,6 +461,8 @@
             dg.initliaze(ele,beginOption);
 
         });
+        ele.css({display:"block"});
+
     };
 
 

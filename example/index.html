@@ -100,11 +100,7 @@
 
            scrollY:        300,
            scrollX:        true,
-           scrollCollapse: true,
-//           paging:         false,
            fixedColumns:   true,
-//          "bProcessing": true,
-//          "bServerSide": true,
             pagerOptionsFormat: function(data){
                 return {
                     countPrePage: 50,
@@ -123,11 +119,7 @@
                   name:"55kai",
                   iPage:4
                 },
-                dataSrc:function(json){
-                  console.log(json,"rrrr");
-
-                  return json.data.aData;
-                },
+                dataSrc:"data.aData",
                 itemFormat:[
                       { "data": function (obj) {
                         return '<span>'+obj.username+'</span>';
