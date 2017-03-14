@@ -57,14 +57,15 @@
             columns.forEach(function(v,k){
                 /*获取分类跨列数*/
                 var obj={
-                    length:v.columns.length,
+                    length:v.columns?v.columns.length:0,
                     parent:parentKey,
                     label:v.label,
                     className:v.className,
                     key:v.key,
                     maxCol:0,
                     rowIndex:1,
-                    maxRow:0
+                    maxRow:0,
+                    format:v.format
                 };
 
                 _self.everyColsObj.push(obj);
@@ -263,18 +264,13 @@
         },
 
         // /*深克隆对象*/
-        // cloneCurrentObj:function (obj1,obj2) {
-        //     var _self=this,obj2=obj2||{};
-        //     for(var i in obj1){
-        //         if(typeof obj1[i] == "object"){
-        //             obj2[i]=(obj1[i].constructor==Array)?[]:{};
-        //             _self.cloneCurrentObj(obj1[i],obj2[i]);
-        //         }else{
-        //             obj2[i]=obj1[i];
-        //         }
-        //     }
-        //     return obj2;
-        // },
+        cloneCurrentObj:function (obj1,obj2) {
+            var _self=this,obj2=obj2||{};
+            for(var i in obj1){
+                obj2[i]=obj1[i];
+            }
+            return obj2;
+        },
 
         /*使用完毕初始化*/
         dtValidateDestory:function(){
@@ -328,13 +324,15 @@
         // this.newOpt.everyColsObj=dtValidate.everyColsObj;
 
         /*深克隆*/
-        this.newOpt.everyColsObj = JSON.parse(JSON.stringify(dtValidate.everyColsObj));
+        // this.newOpt.everyColsObj = JSON.parse(JSON.stringify(dtValidate.everyColsObj));
+        this.newOpt.everyColsObj = dtValidate.cloneCurrentObj(dtValidate.everyColsObj,this.newOpt.everyColsObj );
 
         // this.opt.newColumns=dtValidate.rowIndexArgs;
 
         /*深克隆*/
-        this.opt.newColumns = JSON.parse(JSON.stringify(dtValidate.rowIndexArgs));
-
+        // this.opt.newColumns = JSON.parse(JSON.stringify(dtValidate.rowIndexArgs));
+        this.opt.newColumns = dtValidate.cloneCurrentObj(dtValidate.rowIndexArgs,this.opt.newColumns );
+console.log(   this.newOpt.everyColsObj);
         dtValidate.dtValidateDestory();
 
 
@@ -399,18 +397,34 @@
             columns:[],
             ajax:{},
             searching: false,
-            destroy:true
+            destroy:true,
+            aoColumns:[]
         };
 
         var dtDefaultOpt=opt.dtDefaultOpt;
-        for(var k in opt.everyColsObj){
-            if(opt.everyColsObj[k].length==0){
+        // for(var k in opt.everyColsObj){
+        //     if(opt.everyColsObj[k].length==0){
+        //         var obj={
+        //             "data":opt.everyColsObj[k].key
+        //         };
+        //         dtDefaultOpt.columns.push(obj);
+        //     }
+        // }
+        console.log(opt);
+        for(var i in opt.beginOption.everyColsObj){
+            var v=opt.beginOption.everyColsObj[i];
+            if(v.format&&v.format instanceof Function){
                 var obj={
-                    "data":opt.everyColsObj[k].key
-                };
-                dtDefaultOpt.columns.push(obj);
+                    "data":v.format
+                }
+            }else{
+                var obj={
+                    "data":v.key
+                }
             }
+            dtDefaultOpt.aoColumns.push(obj);
         }
+        console.log(dtDefaultOpt.aoColumns);
 
 
         /*将自定于方法赋予dataTable*/
