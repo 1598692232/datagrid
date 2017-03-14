@@ -87,7 +87,20 @@
               key: 'tizhong',
               label: '体重',
               className: '',
-              columns: []
+              columns: [
+                {
+                  key: 'tizhong1',
+                  label: '体重1',
+                  className: '',
+                  columns: []
+                },
+                {
+                  key: 'tizhong2',
+                  label: '体重2',
+                  className: '',
+                  columns: []
+                }
+              ]
             },
             {
               key:"do",
@@ -130,6 +143,7 @@
                   { "data": "sex" },
                   { "data": "oldAge" },
                   { "data": "newAge" },
+                  { "data": "tizhong"},
                   { "data": "tizhong"},
                   { "data": function () {
                     return '<a data-toggle="modal" data-target="#myModal"  data-title="1"  class="btn btn-success" href="#"><i class="icon-edit icon-white"></i>修改</a>' +'&nbsp;&nbsp;'+'<a   data-title="2"  class="btn btn-danger" href="#"><i class="icon-user icon-white"></i>删除</a>';

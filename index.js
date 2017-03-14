@@ -24,7 +24,9 @@
         group2:[],        /*中间转换对象group*/
         rowIndexArgs:{},  /*最终渲染的tr的对象*/
         maxTrLength:0,    /*最大行数*/
-        /*过滤不必要的字段*/
+        /*过滤不必要的字段
+        * @param fields 初始化配置字段对象（obj）
+        * */
         filter:function (fields){
 
             var keys=fields instanceof Object? Object.keys(fields):"";
@@ -41,8 +43,15 @@
             return fields;
 
         },
-        /*获取列数对象*/
-        allColsObj:function (columns,totalColsArgs,totalCols,final,parentKey){
+        /*获取列数对象，递归操作
+        *
+        * @param columns 参数cloumns对象
+        * @param totalColsArgs 参数cloumns对象
+        * @param totalCols 参数cloumns对象
+        * @param final 参数cloumns对象
+        * @param parentKey 当前列的父级
+        * */
+        allColsObj:function (columns,totalCols,parentKey){
             var _self=this;
 
             columns.forEach(function(v,k){
@@ -61,7 +70,7 @@
                 _self.everyColsObj.push(obj);
 
                 if(v.columns!=undefined&&v.columns instanceof Array&&v.columns.length>0){
-                    _self.allColsObj(v.columns,totalColsArgs,totalCols,k,parentKey==undefined?v.key:parentKey+','+v.key);
+                    _self.allColsObj(v.columns,totalCols,parentKey==undefined?v.key:parentKey+','+v.key);
                 }
             });
 
@@ -288,6 +297,10 @@
 
     var dg=datagrid.prototype;
 
+    /*
+     * @param ele (jquery对象)（obj）
+     * @param option  (初始化配置) （obj）
+     * */
     dg.initliaze=function (ele,option){
         this.ele=ele;
 
@@ -308,7 +321,7 @@
 
         var _self=this;
 
-        dtValidate.allColsObj(_self.opt.columns,_self.opt.totalColsArgs,_self.opt.totalCols);
+        dtValidate.allColsObj(_self.opt.columns,_self.opt.totalCols);
 
         dtValidate.handleEveryColsObj(_self.opt.column);
 
@@ -330,6 +343,11 @@
     };
 
     // 表头初始化
+    /*
+    * @param ele (jquery对象)（obj）
+    * @param dt  (dataTables对象) （obj）
+    * @param defo (过滤后的初始化配置) （obj）
+    * */
     dg.init=function(ele,dt,defo){
         var _self=this,
             trHtml="";
@@ -349,10 +367,14 @@
             '</thead>'+
             '</table>'+
             '<div id="pager"></div>';
+        if(ele.find("table").length>0){
+            ds.destroy();
+        }
         ele.html(tableHtml);
 
-        this.createDataTable(ele,dt,defo);
-        return this;
+        // return ;
+        _self.createDataTable(ele,dt,defo);
+        return _self;
 
     };
 
@@ -415,6 +437,10 @@
 
         dt=ele.find("table").DataTable(dtDefaultOpt);
 
+        // if(ele.find("table").length>2){
+        //     ele.find("table").eq(1).find("thead>tr").css({height:0})
+        // }
+
         $(".dataTables_info").remove();
 
         var beginOption=opt.beginOption,
@@ -472,9 +498,9 @@
 
 
     //销毁datatable
-    // dg.destroy=function(dt){
-    //     dt.clear();
-    // };
+    dg.destroy=function(dt){
+        ds.destroy();
+    };
 
     /*暴露方法*/
     var ds={};
