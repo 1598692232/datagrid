@@ -115,18 +115,18 @@
             },
           ],
 
-//           scrollY:        100,
-//           scrollX:        true,
+           scrollY:        100,
+           scrollX:        true,
 
-//          fixedColumns:[1,1],
-//            pagerOptionsFormat: function(data){
-//                console.log(data);
-//                return {
-////                    countPrePage: 50,
-////                    total: 100,
-//                    perPage: data.data.aData.length
-//                }
-//            },
+          fixedColumns:[1,1],
+            pagerOptionsFormat: function(data){
+                console.log(data);
+                return {
+//                    countPrePage: 50,
+//                    total: 100,
+                    perPage: data.data.aData.length
+                }
+            },
 
             source: {
                 ajaxUrl:"./a.json" ,
@@ -141,19 +141,15 @@
                 currentPageField:"iPager",
 
             }
+        }).on('datagrid:success', function(){
+          console.log(arguments);
+        }).on('datagrid:error', function(){
+
+        }).on('datagrid:mouseover', function(){
+          console.log(arguments);
+        }).on('datagrid:mouseleave', function(){
+          console.log(arguments);
         })
-        .on("success",function (json) {
-          console.log(json,434334);
-        })
-        .on("error",function(s,h,m){
-          console.log(s,h,m);
-        })
-        .on("mouseover",function(colObj,colNode,allColNodes){
-          console.log(colObj,colNode,allColNodes,222221)
-        })
-        .on("mouseleave",function(allColNodes){
-          console.log(allColNodes,222223)
-        });
 
       /*销毁*/
 //      setTimeout(function(){
