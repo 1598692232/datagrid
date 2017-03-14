@@ -291,6 +291,7 @@
     var ds={
         dataGrid:"",
         ajaxSuccess:"",
+        dataTable:"",
         dom:"",
         ajaxJson:"",
         init:function(ele,option){
@@ -303,6 +304,7 @@
             this.ajaxSuccess="";
             this.dom="";
             this.ajaxJson="";
+            this.dataTable="";
             return this;
         },
         on:function(){
@@ -318,13 +320,13 @@
         },
         event:{
             success:function (fn) {
-                if(typeof fn != "function"){
-                    return;
-                }else{
-                    setTimeout(function(){
+                ds.dataTable.on( 'xhr', function () {
+                    try {
                         fn(ds.ajaxJson);
-                    },0);
-                }
+                    }catch (e){
+                        console.log(e);
+                    }
+                });
             },
             error:function(fn){
                 /*修改dataTable报错方法，防止弹框报错*/
@@ -333,7 +335,36 @@
                         fn(s,h,m);
                     }
                 }
-            }
+            },
+            mouseover:function(fn){
+                ds.dataTable.on( 'mouseover','td', function () {
+                    var lastIdx=null;
+
+                    var colIdx = ds.dataTable.cell(this).index().column;
+                    if ( colIdx !== lastIdx ) {
+                        $( ds.dataTable.cells().nodes() ).removeClass( 'highlight' );
+                        $( ds.dataTable.column( colIdx ).nodes() ).addClass( 'highlight' );
+                    }
+                    try {
+                        fn(colIdx, ds.dataTable.column( colIdx ).nodes(),ds.dataTable.cells().nodes());
+                    }catch (e){
+                        console.log(e);
+                    }
+                });
+            },
+            mouseleave:function(fn){
+                ds.dataTable.on( 'mouseleave', function () {
+                    try {
+                        $( ds.dataTable.cells().nodes() ).removeClass( 'highlight' );
+                        fn(ds.dataTable.cells().nodes());
+                    }catch (e){
+                        console.log(e);
+                    }
+                });
+            },
+        },
+        xhr:function(json){
+            return  json;
         }
     };
 
@@ -506,7 +537,7 @@
             delete v.mData;
         });
 
-        dt=ele.find("table").DataTable(dtDefaultOpt);
+        ds.dataTable=dt=ele.find("table").DataTable(dtDefaultOpt);
 
         // if(ele.find("table").length>2){
         //     ele.find("table").eq(1).find("thead>tr").css({height:0})
@@ -522,7 +553,7 @@
 
             var json = ds.ajaxJson=dt.ajax.json();
             var page=beginOption.pagerOptionsFormat?beginOption.pagerOptionsFormat(json):{};/*获取页数属性*/
-
+            ds.xhr(json);
             // if(beginOption.xhrEvent && beginOption.xhrEvent instanceof Function){
             //     beginOption.xhrEvent(json);
             // }

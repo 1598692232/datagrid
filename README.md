@@ -123,6 +123,8 @@ feather2引入
 |----------|----------|
 | success | 渲染成功 |
 | error | 渲染失败 |
+ mouseover |鼠标滑上事件 (回调参数colObj,colNode,allColNodes)|
+ mouseleave |鼠标离开事件（回调参数allColNodes） |
 
 
 

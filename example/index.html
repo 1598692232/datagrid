@@ -119,7 +119,6 @@
 //           scrollX:        true,
 
 //          fixedColumns:[1,1],
-          /*暂时无用*/
 //            pagerOptionsFormat: function(data){
 //                console.log(data);
 //                return {
@@ -147,7 +146,13 @@
           console.log(json,434334);
         })
         .on("error",function(s,h,m){
-          console.log(s,h,m,22222)
+          console.log(s,h,m);
+        })
+        .on("mouseover",function(colObj,colNode,allColNodes){
+          console.log(colObj,colNode,allColNodes,222221)
+        })
+        .on("mouseleave",function(allColNodes){
+          console.log(allColNodes,222223)
         });
 
       /*销毁*/
