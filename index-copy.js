@@ -24,7 +24,9 @@
         group2:[],        /*中间转换对象group*/
         rowIndexArgs:{},  /*最终渲染的tr的对象*/
         maxTrLength:0,    /*最大行数*/
-        /*过滤不必要的字段*/
+        /*过滤不必要的字段
+         * @param fields 初始化配置字段对象（obj）
+         * */
         filter:function (fields){
 
             var keys=fields instanceof Object? Object.keys(fields):"";
@@ -41,27 +43,35 @@
             return fields;
 
         },
-        /*获取列数对象*/
-        allColsObj:function (columns,totalColsArgs,totalCols,final,parentKey){
+        /*获取列数对象，递归操作
+         *
+         * @param columns 参数cloumns对象
+         * @param totalColsArgs 参数cloumns对象
+         * @param totalCols 参数cloumns对象
+         * @param final 参数cloumns对象
+         * @param parentKey 当前列的父级
+         * */
+        allColsObj:function (columns,totalCols,parentKey){
             var _self=this;
 
             columns.forEach(function(v,k){
                 /*获取分类跨列数*/
                 var obj={
-                    length:v.columns.length,
+                    length:v.columns?v.columns.length:0,
                     parent:parentKey,
                     label:v.label,
                     className:v.className,
                     key:v.key,
                     maxCol:0,
                     rowIndex:1,
-                    maxRow:0
+                    maxRow:0,
+                    format:v.format
                 };
 
                 _self.everyColsObj.push(obj);
 
                 if(v.columns!=undefined&&v.columns instanceof Array&&v.columns.length>0){
-                    _self.allColsObj(v.columns,totalColsArgs,totalCols,k,parentKey==undefined?v.key:parentKey+','+v.key);
+                    _self.allColsObj(v.columns,totalCols,parentKey==undefined?v.key:parentKey+','+v.key);
                 }
             });
 
@@ -254,18 +264,13 @@
         },
 
         // /*深克隆对象*/
-        // cloneCurrentObj:function (obj1,obj2) {
-        //     var _self=this,obj2=obj2||{};
-        //     for(var i in obj1){
-        //         if(typeof obj1[i] == "object"){
-        //             obj2[i]=(obj1[i].constructor==Array)?[]:{};
-        //             _self.cloneCurrentObj(obj1[i],obj2[i]);
-        //         }else{
-        //             obj2[i]=obj1[i];
-        //         }
-        //     }
-        //     return obj2;
-        // },
+        cloneCurrentObj:function (obj1,obj2) {
+            var _self=this,obj2=obj2||{};
+            for(var i in obj1){
+                obj2[i]=obj1[i];
+            }
+            return obj2;
+        },
 
         /*使用完毕初始化*/
         dtValidateDestory:function(){
@@ -280,6 +285,54 @@
     };
 
 
+
+    /*暴露方法*/
+    var ds={
+        dataGrid:"",
+        ajaxSuccess:"",
+        dom:"",
+        ajaxJson:"",
+        init:function(ele,option){
+            this.dataGrid=new datagrid(ele,option);
+            return this;
+        },
+        destroy:function(){
+            this.dom.html("");
+            return this;
+        },
+        on:function(){
+            if(typeof arguments[0]=="string"){
+                // var event=arguments[0].split(":");
+                // console.log(event);
+                // if(event.length!=2)return this;
+                this.event[arguments[0]](arguments[1]);
+            }else{
+                return this;
+            }
+            return this;
+        },
+        event:{
+            success:function (fn) {
+                if(typeof fn != "function"){
+                    return;
+                }else{
+                    setTimeout(function(){
+                        fn(ds.ajaxJson);
+                    },0);
+                }
+            },
+            error:function(fn){
+                /*修改dataTable报错方法，防止弹框报错*/
+                $.fn.dataTable.ext.errMode = function(s,h,m){
+                    if(typeof fn == "function"){
+                        fn(s,h,m);
+                    }
+                }
+            }
+        }
+    };
+
+
     /*datagrid构造函数*/
 
     var datagrid=function (ele,option){
@@ -288,6 +341,10 @@
 
     var dg=datagrid.prototype;
 
+    /*
+     * @param ele (jquery对象)（obj）
+     * @param option  (初始化配置) （obj）
+     * */
     dg.initliaze=function (ele,option){
         this.ele=ele;
 
@@ -303,33 +360,38 @@
 
         this.newOpt=dtValidate.filter.call(this,option);
 
-
         this.opt=$.extend({},this.newOpt,this.default);
 
         var _self=this;
 
-        dtValidate.allColsObj(_self.opt.columns,_self.opt.totalColsArgs,_self.opt.totalCols);
+        dtValidate.allColsObj(_self.opt.columns,_self.opt.totalCols);
 
         dtValidate.handleEveryColsObj(_self.opt.column);
 
         // this.newOpt.everyColsObj=dtValidate.everyColsObj;
 
         /*深克隆*/
-        this.newOpt.everyColsObj = JSON.parse(JSON.stringify(dtValidate.everyColsObj));
+        // this.newOpt.everyColsObj = JSON.parse(JSON.stringify(dtValidate.everyColsObj));
+        this.newOpt.everyColsObj = dtValidate.cloneCurrentObj(dtValidate.everyColsObj,this.newOpt.everyColsObj );
 
         // this.opt.newColumns=dtValidate.rowIndexArgs;
 
         /*深克隆*/
-        this.opt.newColumns = JSON.parse(JSON.stringify(dtValidate.rowIndexArgs));
+        // this.opt.newColumns = JSON.parse(JSON.stringify(dtValidate.rowIndexArgs));
+        this.opt.newColumns = dtValidate.cloneCurrentObj(dtValidate.rowIndexArgs,this.opt.newColumns );
 
         dtValidate.dtValidateDestory();
-
 
         this.init(this.ele,this.dataTable,this.opt);
 
     };
 
     // 表头初始化
+    /*
+     * @param ele (jquery对象)（obj）
+     * @param dt  (dataTables对象) （obj）
+     * @param defo (过滤后的初始化配置) （obj）
+     * */
     dg.init=function(ele,dt,defo){
         var _self=this,
             trHtml="";
@@ -349,16 +411,20 @@
             '</thead>'+
             '</table>'+
             '<div id="pager"></div>';
+        if(ele.find("table").length>0){
+            ds.destroy();
+        }
         ele.html(tableHtml);
 
-        this.createDataTable(ele,dt,defo);
-        return this;
+        // return ;
+        _self.createDataTable(ele,dt,defo);
+        return _self;
 
     };
 
     /*ajax重写为source*/
-    const CAN_FIELDS=['columns','pagerOptionsFormat','source','itemFormat',
-        'fixedColumns','columnDefs','aoColumns','scrollY','scrollX','pagerOptionsFormat','dataTotal','xhrEvent'];
+    const CAN_FIELDS=['columns','pagerOptionsFormat','source',
+        'fixedColumns','columnDefs','aoColumns','scrollY','scrollX','pagerOptionsFormat','dataTotal'];
 
     /*dataTable初始化*/
     dg.createDataTable=function(ele,dt,opt){
@@ -377,25 +443,41 @@
             columns:[],
             ajax:{},
             searching: false,
-            destroy:true
+            destroy:true,
+            aoColumns:[]
         };
 
         var dtDefaultOpt=opt.dtDefaultOpt;
-        for(var k in opt.everyColsObj){
-            if(opt.everyColsObj[k].length==0){
-                var obj={
-                    "data":opt.everyColsObj[k].key
-                };
-                dtDefaultOpt.columns.push(obj);
+        // for(var k in opt.everyColsObj){
+        //     if(opt.everyColsObj[k].length==0){
+        //         var obj={
+        //             "data":opt.everyColsObj[k].key
+        //         };
+        //         dtDefaultOpt.columns.push(obj);
+        //     }
+        // }
+
+        for(var i in opt.beginOption.everyColsObj){
+            var v=opt.beginOption.everyColsObj[i];
+            if(v.length==0){
+                if(v.format&&v.format instanceof Function){
+                    var obj={
+                        "data":v.format
+                    }
+                }else{
+                    var obj={
+                        "data":v.key
+                    }
+                }
+                dtDefaultOpt.aoColumns.push(obj);
             }
         }
-
 
         /*将自定于方法赋予dataTable*/
         dtDefaultOpt.ajax.url=opt.source.ajaxUrl;
         dtDefaultOpt.ajax.data=opt.source.requestData;
         dtDefaultOpt.ajax.dataSrc=opt.source.dataSrc;
-        dtDefaultOpt.aoColumns=opt.source.itemFormat;
+        // dtDefaultOpt.aoColumns=dtDefaultOpt.aoColumns;
         dtDefaultOpt.fixedColumns=opt.fixedColumns;
         dtDefaultOpt.scrollY=opt.scrollY;
         dtDefaultOpt.scrollX=opt.scrollX;
@@ -415,25 +497,28 @@
 
         dt=ele.find("table").DataTable(dtDefaultOpt);
 
+        // if(ele.find("table").length>2){
+        //     ele.find("table").eq(1).find("thead>tr").css({height:0})
+        // }
+
         $(".dataTables_info").remove();
 
         var beginOption=opt.beginOption,
             source=opt.beginOption.source;
 
         dt.on( 'xhr', function () {
-
+            ds.ajaxSuccess=true;
             var page=beginOption.pagerOptionsFormat();/*获取页数属性*/
-            var json = dt.ajax.json();
+            var json = ds.ajaxJson=dt.ajax.json();
 
-            if(beginOption.xhrEvent && beginOption.xhrEvent instanceof Function){
-                beginOption.xhrEvent(json);
-            }
+            // if(beginOption.xhrEvent && beginOption.xhrEvent instanceof Function){
+            //     beginOption.xhrEvent(json);
+            // }
 
             var dataTotal=eval('json.'+source.dataTotal);
             _self.createPager(ele,dt,opt,page,dataTotal);
 
         } );
-
 
         return this;
     };
@@ -472,32 +557,22 @@
 
 
     //销毁datatable
-    // dg.destroy=function(dt){
-    //     dt.clear();
-    // };
-
-    /*暴露方法*/
-    var ds={};
+    dg.destroy=function(dt){
+        ds.destroy();
+    };
 
     //新增jquery扩展函数dataTables
     $.fn.datagrid = function (option) {
         var _self=this;
-        if(Object.keys(ds).length==0){
-            ds={
-                dataGrid:"",
-                init:function(){
-                    this.dataGrid=new datagrid(_self,option);
-                    return this;
-                },
-                destroy:function(){
-                    _self.html("");
-                    return this;
-                }
-            };
-            return ds.init();
-        }else{
-            return new datagrid(this,option);
-        }
+        ds.dom=_self;
+        return ds.init(this,option);
+        // if(Object.keys(ds).length==0){
+        //
+        //
+        // }else{
+        //     return new datagrid(this,option);
+        // }
     };
+
 
 });

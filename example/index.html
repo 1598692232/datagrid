@@ -106,7 +106,10 @@
               key:"do",
               label: '操作',
               className: '',
-              columns: []
+              columns: [],
+              format:function(obj){
+                return '<a data-toggle="modal" data-target="#myModal"  data-title="1"  class="btn btn-success" href="#"><i class="icon-edit icon-white"></i>修改</a>' +'&nbsp;&nbsp;'+'<a   data-title="2"  class="btn btn-danger" href="#"><i class="icon-user icon-white"></i>删除</a>';
+              }
             },
           ],
 
@@ -135,21 +138,21 @@
                 },
                 dataSrc:"data.aData",
                 dataTotal:"data.iTotal",
-                itemFormat:[
-                      { "data": function (obj) {
-                        return '<span>'+obj.username+'</span>';
-                      }
-                  },
-                  { "data": "sex" },
-                  { "data": "oldAge" },
-                  { "data": "newAge" },
-                  { "data": "tizhong"},
-                  { "data": "tizhong"},
-                  { "data": function () {
-                    return '<a data-toggle="modal" data-target="#myModal"  data-title="1"  class="btn btn-success" href="#"><i class="icon-edit icon-white"></i>修改</a>' +'&nbsp;&nbsp;'+'<a   data-title="2"  class="btn btn-danger" href="#"><i class="icon-user icon-white"></i>删除</a>';
-                  }}
-
-                ],
+//                itemFormat:[
+////                      { "data": function (obj) {
+////                        return '<span>'+obj.username+'</span>';
+////                      }},
+//                  {"data":"username"},
+//                  { "data": "sex" },
+//                  { "data": "oldAge" },
+//                  { "data": "newAge" },
+//                  { "data": "tizhong"},
+//                  { "data": "tizhong"},
+//                  { "data": function () {
+//                    return '<a data-toggle="modal" data-target="#myModal"  data-title="1"  class="btn btn-success" href="#"><i class="icon-edit icon-white"></i>修改</a>' +'&nbsp;&nbsp;'+'<a   data-title="2"  class="btn btn-danger" href="#"><i class="icon-user icon-white"></i>删除</a>';
+//                  }}
+//
+//                ],
 
             },
           xhrEvent:function (json) {
@@ -157,6 +160,12 @@
           }
 
 
+        })
+        .on("success",function (json) {
+          console.log(json,434334);
+        })
+        .on("error",function(s,h,m){
+          console.log(s,h,m,22222)
         });
 
       /*销毁*/
