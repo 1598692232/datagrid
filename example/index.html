@@ -92,7 +92,9 @@
                   key: 'tizhong1',
                   label: '体重1',
                   className: '',
-                  columns: []
+                  columns: [
+
+                  ]
                 },
                 {
                   key: 'tizhong2',
@@ -113,20 +115,19 @@
             },
           ],
 
-           scrollY:        300,
-           scrollX:        true,
-//           fixedColumns:   true,
-          fixedColumns: {
-            leftColumns: 1,
-            rightColumns:1
-          },
-            pagerOptionsFormat: function(data){
-                return {
-                    countPrePage: 50,
-                    total: 100,
-                    perPage: 10
-                }
-            },
+//           scrollY:        100,
+//           scrollX:        true,
+
+//          fixedColumns:[1,1],
+          /*暂时无用*/
+//            pagerOptionsFormat: function(data){
+//                console.log(data);
+//                return {
+////                    countPrePage: 50,
+////                    total: 100,
+//                    perPage: data.data.aData.length
+//                }
+//            },
 
             source: {
                 ajaxUrl:"./a.json" ,
@@ -134,32 +135,13 @@
                   a:"qeqwe",
                   id:"555",
                   name:"55kai",
-                  iPage:4
+                  iPager:4,
                 },
                 dataSrc:"data.aData",
                 dataTotal:"data.iTotal",
-//                itemFormat:[
-////                      { "data": function (obj) {
-////                        return '<span>'+obj.username+'</span>';
-////                      }},
-//                  {"data":"username"},
-//                  { "data": "sex" },
-//                  { "data": "oldAge" },
-//                  { "data": "newAge" },
-//                  { "data": "tizhong"},
-//                  { "data": "tizhong"},
-//                  { "data": function () {
-//                    return '<a data-toggle="modal" data-target="#myModal"  data-title="1"  class="btn btn-success" href="#"><i class="icon-edit icon-white"></i>修改</a>' +'&nbsp;&nbsp;'+'<a   data-title="2"  class="btn btn-danger" href="#"><i class="icon-user icon-white"></i>删除</a>';
-//                  }}
-//
-//                ],
+                currentPageField:"iPager",
 
-            },
-          xhrEvent:function (json) {
-            console.log(json,646464);
-          }
-
-
+            }
         })
         .on("success",function (json) {
           console.log(json,434334);

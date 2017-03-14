@@ -1,12 +1,13 @@
 ;(function (factory) {
     if (typeof define == 'function' && define.amd) {
         //seajs or requirejs environment
-        define(['jquery','class','pager',"./dataTables.js","./dataTables.fixedColumns.min.js"], factory);
+        define(['jquery','class','pager','legoland',"./dataTables.js","./dataTables.fixedColumns.min.js"], factory);
     } else if (typeof module === 'object' && typeof module.exports == 'object') {
         module.exports = factory(
             require('jquery'),
             require('class'),
             require('pager'),
+            require('legoland'),
             require("./jquery.dataTables.js"),
             require("./dataTables.fixedColumns.js")
         );
@@ -298,6 +299,10 @@
         },
         destroy:function(){
             this.dom.html("");
+            this.dataGrid="";
+            this.ajaxSuccess="";
+            this.dom="";
+            this.ajaxJson="";
             return this;
         },
         on:function(){
@@ -416,7 +421,6 @@
         }
         ele.html(tableHtml);
 
-        // return ;
         _self.createDataTable(ele,dt,defo);
         return _self;
 
@@ -424,7 +428,7 @@
 
     /*ajax重写为source*/
     const CAN_FIELDS=['columns','pagerOptionsFormat','source',
-        'fixedColumns','columnDefs','aoColumns','scrollY','scrollX','pagerOptionsFormat','dataTotal'];
+        'fixedColumns','columnDefs','aoColumns','scrollY','scrollX','dataTotal'];
 
     /*dataTable初始化*/
     dg.createDataTable=function(ele,dt,opt){
@@ -478,7 +482,14 @@
         dtDefaultOpt.ajax.data=opt.source.requestData;
         dtDefaultOpt.ajax.dataSrc=opt.source.dataSrc;
         // dtDefaultOpt.aoColumns=dtDefaultOpt.aoColumns;
-        dtDefaultOpt.fixedColumns=opt.fixedColumns;
+        if( opt.fixedColumns&&opt.fixedColumns.length>0){
+            dtDefaultOpt.fixedColumns= {
+                leftColumns: opt.fixedColumns[0],
+                rightColumns: opt.fixedColumns[1]?opt.fixedColumns[1]:0
+            };
+        }
+
+        // dtDefaultOpt.fixedColumns=opt.fixedColumns;
         dtDefaultOpt.scrollY=opt.scrollY;
         dtDefaultOpt.scrollX=opt.scrollX;
 
@@ -508,8 +519,9 @@
 
         dt.on( 'xhr', function () {
             ds.ajaxSuccess=true;
-            var page=beginOption.pagerOptionsFormat();/*获取页数属性*/
+
             var json = ds.ajaxJson=dt.ajax.json();
+            var page=beginOption.pagerOptionsFormat?beginOption.pagerOptionsFormat(json):{};/*获取页数属性*/
 
             // if(beginOption.xhrEvent && beginOption.xhrEvent instanceof Function){
             //     beginOption.xhrEvent(json);
@@ -527,32 +539,34 @@
     dg.createPager=function(ele,dt,opt,page,dataTotal){
         var beginOption=opt.beginOption,
             source=opt.beginOption.source;
+        if(beginOption.pagerOptionsFormat){
+            var ipageFeild=source.currentPageField?source.currentPageField:"iPage";
+            $("#pager").pager({
+                // total: page.total/page.perPage,
+                total: dataTotal/page.perPage,
+                current:  source.requestData?(source.requestData[ipageFeild]? source.requestData[ipageFeild]:1):[],
+                showFirstBtn: false
+            }).on("pager:switch", function(event, index){
 
-        $("#pager").pager({
-            // total: page.total/page.perPage,
-            total: dataTotal/page.perPage,
-            current: source.requestData.iPage? source.requestData.iPage:1,
-            showFirstBtn: false
-        }).on("pager:switch", function(event, index){
+                beginOption.pagerOptionsFormat=function () {
+                    return {
+                        countPrePage: page.countPrePage,
+                        total:  page.total,
+                        perPage:  page.perPage
+                    }
+                };
 
-            beginOption.pagerOptionsFormat=function () {
-                return {
-                    countPrePage: page.countPrePage,
-                    total:  page.total,
-                    perPage:  page.perPage
-                }
-            };
+                opt.dtDefaultOpt.iPager=index;
 
-            opt.dtDefaultOpt.iPager=index;
+                source.requestData[ipageFeild]=index;
 
-            source.requestData.iPage=index;
+                // dg.destory(ele);
+                dg.destroy(dt);
 
-            // dg.destory(ele);
-            dg.destroy(dt);
+                dg.initliaze(ele,beginOption);
 
-            dg.initliaze(ele,beginOption);
-
-        });
+            });
+        }
     };
 
 
@@ -561,17 +575,11 @@
         ds.destroy();
     };
 
-    //新增jquery扩展函数dataTables
+    //新增jquery扩展函数datagrid
     $.fn.datagrid = function (option) {
         var _self=this;
         ds.dom=_self;
         return ds.init(this,option);
-        // if(Object.keys(ds).length==0){
-        //
-        //
-        // }else{
-        //     return new datagrid(this,option);
-        // }
     };
 
 
