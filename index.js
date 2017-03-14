@@ -11,9 +11,9 @@
             require("./dataTables.fixedColumns.js")
         );
     } else {
-       factory(window.jQuery);
+        factory(window.jQuery, window.jQuery.klass);
     }
-})(function ($) {
+})(function ($,Class) {
 
 
     /*为datagrid提供方法*/
@@ -343,12 +343,12 @@
             trHtml+=tr;
         }
 
-        var tableHtml='<table cellspacing="0" width="100%">'+
-                            '<thead>'+
-                             trHtml+
-                            '</thead>'+
-                          '</table>'+
-                        '<div id="pager"></div>';
+        var tableHtml='<table cellspacing="0" width="100%" class="lg-table">'+
+            '<thead>'+
+            trHtml+
+            '</thead>'+
+            '</table>'+
+            '<div id="pager"></div>';
         ele.html(tableHtml);
 
         this.createDataTable(ele,dt,defo);
@@ -358,7 +358,7 @@
 
     /*ajax重写为source*/
     const CAN_FIELDS=['columns','pagerOptionsFormat','source','itemFormat',
-        'fixedColumns','columnDefs','aoColumns','scrollY','scrollX','pagerOptionsFormat','dataTotal'];
+        'fixedColumns','columnDefs','aoColumns','scrollY','scrollX','pagerOptionsFormat','dataTotal','xhrEvent'];
 
     /*dataTable初始化*/
     dg.createDataTable=function(ele,dt,opt){
@@ -399,6 +399,7 @@
         dtDefaultOpt.fixedColumns=opt.fixedColumns;
         dtDefaultOpt.scrollY=opt.scrollY;
         dtDefaultOpt.scrollX=opt.scrollX;
+
         // dtDefaultOpt.scrollCollapse=true;
         dtDefaultOpt.fnServerParams=function(aoData){
             for(var k in opt.source.requestData){
@@ -412,18 +413,22 @@
             delete v.mData;
         });
 
-        // ele.css({display:"none"});
         dt=ele.find("table").DataTable(dtDefaultOpt);
-        // var api = new $.fn.dataTable.Api( destory );
 
         $(".dataTables_info").remove();
 
         var beginOption=opt.beginOption,
             source=opt.beginOption.source;
+
         dt.on( 'xhr', function () {
 
             var page=beginOption.pagerOptionsFormat();/*获取页数属性*/
             var json = dt.ajax.json();
+
+            if(beginOption.xhrEvent && beginOption.xhrEvent instanceof Function){
+                beginOption.xhrEvent(json);
+            }
+
             var dataTotal=eval('json.'+source.dataTotal);
             _self.createPager(ele,dt,opt,page,dataTotal);
 
@@ -457,25 +462,42 @@
 
             source.requestData.iPage=index;
 
-            dg.destory(ele);
+            // dg.destory(ele);
+            dg.destroy(dt);
 
             dg.initliaze(ele,beginOption);
 
         });
-        // ele.css({display:"block"});
-
     };
-    
+
 
     //销毁datatable
-    dg.destory=function(ele){
-        ele.find("table").length>0&&ele.html("");
-    };
+    // dg.destroy=function(dt){
+    //     dt.clear();
+    // };
 
+    /*暴露方法*/
+    var ds={};
 
     //新增jquery扩展函数dataTables
     $.fn.datagrid = function (option) {
-        return new datagrid(this,option);
+        var _self=this;
+        if(Object.keys(ds).length==0){
+            ds={
+                dataGrid:"",
+                init:function(){
+                    this.dataGrid=new datagrid(_self,option);
+                    return this;
+                },
+                destroy:function(){
+                    _self.html("");
+                    return this;
+                }
+            };
+           return ds.init();
+        }else{
+            return new datagrid(this,option);
+        }
     };
 
 });

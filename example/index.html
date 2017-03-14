@@ -4,13 +4,11 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="../jquery.dataTables.css" media="screen" title="no title" charset="utf-8">
     <link rel="stylesheet" href="../bower_components/pager/index.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet/less" href="../bower_components/legoland/src/legoland.css" media="screen" title="no title" charset="utf-8">
+    <!--<link rel="stylesheet" href="../bower_components/legoland/src/style.css" media="screen" title="no title" charset="utf-8">-->
     <title></title>
   </head>
-  <style>
-    table td{
-      border: 1px solid #666;
-    }
-  </style>
+
   <body>
     <div class="" id="dt"></div>
     <!--<div class="" id="dt2"></div>-->
@@ -49,6 +47,7 @@
       <!--</tr>-->
       </thead>
     </table>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.3/less.min.js"></script>
     <script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
     <script type="text/javascript" src="../bower_components/class/index.js"></script>
     <script type="text/javascript" src="../bower_components/pager/index.js"></script>
@@ -100,7 +99,11 @@
 
            scrollY:        300,
            scrollX:        true,
-           fixedColumns:   true,
+//           fixedColumns:   true,
+          fixedColumns: {
+            leftColumns: 1,
+            rightColumns:1
+          },
             pagerOptionsFormat: function(data){
                 return {
                     countPrePage: 50,
@@ -132,11 +135,20 @@
                     return '<a data-toggle="modal" data-target="#myModal"  data-title="1"  class="btn btn-success" href="#"><i class="icon-edit icon-white"></i>修改</a>' +'&nbsp;&nbsp;'+'<a   data-title="2"  class="btn btn-danger" href="#"><i class="icon-user icon-white"></i>删除</a>';
                   }}
 
-                ]
-            }
+                ],
+
+            },
+          xhrEvent:function (json) {
+            console.log(json,646464);
+          }
 
 
         });
+
+      /*销毁*/
+//      setTimeout(function(){
+//        console.log( dataTables.destroy());
+//      },3000);
 
 
 
