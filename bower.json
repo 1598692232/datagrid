@@ -1,5 +1,5 @@
 {
-    "name": "datatables",
+    "name": "datagrid",
     "desc": "动态生成table",
     "main": "index.js",
     "version": "1.0.0",
