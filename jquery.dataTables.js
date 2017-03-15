@@ -948,14 +948,13 @@
 				sId = "DataTables_Table_"+(DataTable.ext._unique++);
 				this.id = sId;
 			}
-	console.log()
 			/* Create the settings object for this table and set some of the default parameters */
 			var oSettings = $.extend( true, {}, DataTable.models.oSettings, {
 				"sDestroyWidth": $this[0].style.width,
 				"sInstance":     sId,
 				"sTableId":      sId
 			} );
-			console.log(oSettings);
+
 			oSettings.nTable = this;
 			oSettings.oApi   = _that.internal;
 			oSettings.oInit  = oInit;
@@ -4708,7 +4707,7 @@
 		// will do the drawing for us. Otherwise we draw the table regardless of the
 		// Ajax source - this allows the table to look initialised for Ajax sourcing
 		// data (show 'loading' message possibly)
-		console.log(3333);
+
 		_fnReDraw( settings );
 	
 		// Server-side processing init complete is done by _fnAjaxUpdateDraw
@@ -5816,7 +5815,7 @@
 	
 	function _fnSortFlatten ( settings )
 	{
-		console.log(settings);
+
 		var
 			i, iLen, k, kLen,
 			aSort = [],
@@ -5856,7 +5855,7 @@
 		for ( i=0 ; i<nestedSort.length ; i++ )
 		{
 			srcCol = nestedSort[i][0];
-			console.log(aoColumns, srcCol);
+
 			aDataSort = aoColumns[ srcCol ].aDataSort;
 	
 			for ( k=0, kLen=aDataSort.length ; k<kLen ; k++ )
@@ -6071,7 +6070,7 @@
 	 */
 	function _fnSortListener ( settings, colIdx, append, callback )
 	{
-		console.log(333);
+
 		var col = settings.aoColumns[ colIdx ];
 		var sorting = settings.aaSorting;
 		var asSorting = col.asSorting;
@@ -7412,7 +7411,7 @@
 						false :
 						true;
 				}
-				console.log(333);
+
 	
 				_fnReDraw( settings, paging===false );
 			}
@@ -7534,7 +7533,6 @@
 			} );
 		}
 
-		console.log(333);console.log(333);
 	
 		if ( _fnDataSource( settings ) == 'ssp' ) {
 			_fnReDraw( settings, holdPosition );

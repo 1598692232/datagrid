@@ -113,17 +113,13 @@ feather2引入
 | scrollX | false | N | 是否横向滚动 （boolean）|
 | fixedColumns | /| N | 列固定（array）如[1,2],左边第一列，右边第一第二列不能滚动 |
 
-## api&事件
-
-| api | 说明 |
-|----------|----------|
-| destroy | 销毁table|
+## 事件
 
 | 事件 | 说明 |
 |----------|----------|
-| success | 渲染成功 |
-| error | 渲染失败 |
- mouseover |鼠标滑上事件 (回调参数colObj,colNode,allColNodes)|
+| datagrid:success | 渲染成功 |
+|datagrid:error| 渲染失败 |
+ datagrid:mouseleave |鼠标滑上事件 (回调参数colObj,colNode,allColNodes)|
  mouseleave |鼠标离开事件（回调参数allColNodes） |
 
 

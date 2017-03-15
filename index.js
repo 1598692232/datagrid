@@ -284,32 +284,9 @@
         }
     };
 
-
-    /*暴露方法*/
-    var ds={
-        dataGrid:"",
-        ajaxSuccess:"",
-        dataTable:"",
-        dom:"",
-        ajaxJson:"",
-        init:function(ele,option){
-            this.dataGrid=new datagrid(ele,option);
-            return this;
-        },
-        destroy:function(){
-            this.dom.html("");
-            this.dataGrid="";
-            this.ajaxSuccess="";
-            this.dom="";
-            this.ajaxJson="";
-            this.dataTable="";
-            return this;
-        },
-    };
-
     return Class.$factory('datagrid', {
         initialize: function (option) {
-            this.ele = $(option.dom);
+            this.ele = $(option.dom) ;
 
             this.default = {
                 totalCols: 0,
@@ -318,9 +295,9 @@
                 dataTable: "",
                 aoData: [],
                 beginOption: option,
-                ds: ''
+                ds: '',
+                tableHeader:""
             };
-
 
             this.newOpt = dtValidate.filter.call(this, option);
 
@@ -332,11 +309,9 @@
 
             dtValidate.handleEveryColsObj(_self.opt.column);
 
-
             /*深克隆*/
             // this.newOpt.everyColsObj = JSON.parse(JSON.stringify(dtValidate.everyColsObj));
             this.opt.beginOption.everyColsObj = dtValidate.cloneCurrentObj(dtValidate.everyColsObj, this.newOpt.everyColsObj);
-        //console.log(this.newOpt);
             // this.opt.newColumns=dtValidate.rowIndexArgs;
 
             /*深克隆*/
@@ -344,8 +319,8 @@
             this.opt.newColumns = dtValidate.cloneCurrentObj(dtValidate.rowIndexArgs, this.opt.newColumns);
 
             dtValidate.dtValidateDestory();
-    console.log(this.opt);
-            this.init(this.ele, this.dataTable, this.opt);
+
+            this.init(this.ele, this.opt);
 
         },
 
@@ -355,38 +330,39 @@
          * @param dt  (dataTables对象) （obj）
          * @param defo (过滤后的初始化配置) （obj）
          * */
-        init: function (ele, dt, defo) {
-            var _self = this,
-                trHtml = "";
+        init: function (ele, defo) {
+            var _self = this;
 
-            for (var k in defo.newColumns) {
-                var tr = "<tr>";
-                defo.newColumns[k].forEach(function (v, m) {
-                    tr += "<td colspan='" + v.maxCol + "' rowspan='" + v.maxRow + "' class='" + v.className + "'>" + v.label + "</td>";
-                });
-                tr += "</tr>";
-                trHtml += tr;
+            if( defo.tableHeader==""){
+                var trHtml = "";
+                for (var k in defo.newColumns) {
+                    var tr = "<tr>";
+                    defo.newColumns[k].forEach(function (v, m) {
+                        tr += "<td colspan='" + v.maxCol + "' rowspan='" + v.maxRow + "' class='" + v.className + "'>" + v.label + "</td>";
+                    });
+                    tr += "</tr>";
+                    trHtml += tr;
+                }
+
+
+                defo.tableHeader= '<table cellspacing="0" width="100%" class="lg-table">' +
+                    '<thead>' +
+                    trHtml +
+                    '</thead>' +
+                    '</table>' +
+                    '<div id="pager"></div>';
             }
 
-            var tableHtml = '<table cellspacing="0" width="100%" class="lg-table">' +
-                '<thead>' +
-                trHtml +
-                '</thead>' +
-                '</table>' +
-                '<div id="pager"></div>';
-            if (ele.find("table").length > 0) {
-                ds.destroy();
-            }
-            ele.html(tableHtml);
+            ele.html(defo.tableHeader);
 
-            _self.createDataTable(ele, dt, defo);
+            _self.createDataTable(ele, defo);
             return _self;
 
         },
 
 
         /*dataTable初始化*/
-        createDataTable: function (ele, dt, opt) {
+        createDataTable: function (ele, opt) {
 
             var _self = this;
 
@@ -434,7 +410,6 @@
                 }
             }
 
-            console.log(dtDefaultOpt.aoColumns);
 
             /*将自定于方法赋予dataTable*/
             dtDefaultOpt.ajax.url = opt.source.ajaxUrl;
@@ -468,10 +443,10 @@
             var beginOption = opt.beginOption,
                 source = opt.beginOption.source;
 
-            var self = this;
-            var dt = this.dt = ele.find("table").DataTable(dtDefaultOpt);
+
+            this.dt = ele.find("table").DataTable(dtDefaultOpt);
             this.dt.on('xhr', function (){
-                var json = dt.ajax.json();
+                var json =_self.dt.ajax.json();
                 var page = beginOption.pagerOptionsFormat ? beginOption.pagerOptionsFormat(json) : {};
                 /*获取页数属性*/
 
@@ -480,19 +455,18 @@
                 // }
 
                 var dataTotal = eval('json.' + source.dataTotal);
-                _self.createPager(ele, dt, opt, page, dataTotal);
-                self.trigger('success', json);
+                _self.createPager(ele, opt, page, dataTotal,_self);
+                _self.trigger('success', json);
 
             }).on('error', function(){
                 /*修改dataTable报错方法，防止弹框报错*/
                  self.trigger('error');
             }).on('mouseover', 'td', function(){
                     var lastIdx=null;
-
-                    var colIdx = dt.cell(this).index().column;
-                    self.trigger('mouseover', [colIdx, dt.column( colIdx ).nodes(),dt.cells().nodes()]);
+                    var colIdx = _self.dt.cell(this).index().column;
+                    _self.trigger('mouseover', [colIdx, _self.dt.column( colIdx ).nodes(),_self.dt.cells().nodes()]);
             }).on('mouseleave', function(fn){
-                    self.trigger('mouseleave', dt.cells().nodes());
+                _self.trigger('mouseleave', _self.dt.cells().nodes());
             });
 
             // if(ele.find("table").length>2){
@@ -505,11 +479,13 @@
         },
 
         /*创建页面*/
-        createPager: function (ele, dt, opt, page, dataTotal) {
+        createPager: function (ele, opt, page, dataTotal) {
             var beginOption = opt.beginOption,
-                source = opt.beginOption.source;
+                source = opt.beginOption.source,_self=this;
+
             if (beginOption.pagerOptionsFormat) {
                 var ipageFeild = source.currentPageField ? source.currentPageField : "iPage";
+
                 $("#pager").pager({
                     // total: page.total/page.perPage,
                     total: dataTotal / page.perPage,
@@ -529,17 +505,13 @@
 
                     source.requestData[ipageFeild] = index;
 
-                    // dg.destory(ele);
-                    // dg.destroy(dt);
+                    _self.dt.destroy();
+                    _self.dt.clear();
 
-                    this.initliaze(ele, beginOption);
+                    _self.init( _self.ele,_self.opt);
 
                 });
             }
-        },
-        //销毁datatable
-        destroy: function (dt) {
-            ds.destroy();
         }
     });
 
