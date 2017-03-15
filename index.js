@@ -350,7 +350,7 @@
                     trHtml +
                     '</thead>' +
                     '</table>' +
-                    '<div id="pager"></div>';
+                    '<div class="pager"></div>';
             }
 
             ele.html(defo.tableHeader);
@@ -486,7 +486,7 @@
             if (beginOption.pagerOptionsFormat) {
                 var ipageFeild = source.currentPageField ? source.currentPageField : "iPage";
 
-                $("#pager").pager({
+                ele.find(".pager").pager({
                     // total: page.total/page.perPage,
                     total: dataTotal / page.perPage,
                     current: source.requestData ? (source.requestData[ipageFeild] ? source.requestData[ipageFeild] : 1) : [],

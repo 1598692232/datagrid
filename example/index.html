@@ -11,7 +11,7 @@
 
   <body>
     <div class="" id="dt"></div>
-    <!--<div class="" id="dt2"></div>-->
+    <div class="" id="dt2"></div>
 
     <table>
       <thead>
@@ -151,11 +151,99 @@
           console.log(arguments);
         });
 
-      /*销毁*/
-//      setTimeout(function(){
-//        console.log( dataTables.destroy());
-//      },3000);
+        var dataTables= $("#dt2").datagrid({
+            columns: [
+                {
+                    key: 'username',
+                    label: '用户名',
+                    className: '',
+                    columns: []
+                },
+                {
+                    key: 'sex',
+                    label: '性别',
+                    className: '',
+                    columns: []
+                },
+                {
+                    key: 'oldAge',
+                    label: '周岁',
+                    className: '',
+                    columns: []
+                },
+                {
+                    key: 'newAge',
+                    label: '虚岁',
+                    className: '',
+                    columns: []
+                },
+                {
+                    key: 'tizhong',
+                    label: '体重',
+                    className: '',
+                    columns: [
+                        {
+                            key: 'tizhong1',
+                            label: '体重1',
+                            className: '',
+                            columns: [
 
+                            ]
+                        },
+                        {
+                            key: 'tizhong2',
+                            label: '体重2',
+                            className: '',
+                            columns: []
+                        }
+                    ]
+                },
+                {
+                    key:"do",
+                    label: '操作',
+                    className: '',
+                    columns: [],
+                    format:function(obj){
+                        return '<a data-toggle="modal" data-target="#myModal"  data-title="1"  class="btn btn-success" href="#"><i class="icon-edit icon-white"></i>修改</a>' +'&nbsp;&nbsp;'+'<a   data-title="2"  class="btn btn-danger" href="#"><i class="icon-user icon-white"></i>删除</a>';
+                    }
+                },
+            ],
+
+            scrollY:        100,
+            scrollX:        true,
+
+            fixedColumns:[1,1],
+            pagerOptionsFormat: function(data){
+                console.log(data);
+                return {
+                    //                    countPrePage: 50,
+                    //                    total: 100,
+                    perPage: data.data.aData.length
+                }
+            },
+
+            source: {
+                ajaxUrl:"./a.json" ,
+                requestData: {
+                    a:"qeqwe",
+                    id:"555",
+                    name:"55kai",
+                    iPager:4,
+                },
+                dataSrc:"data.aData",
+                dataTotal:"data.iTotal",
+                currentPageField:"iPager",
+
+            }
+        }).on('datagrid:success', function(){
+            console.log(arguments);
+        }).on('datagrid:error', function(){
+
+        }).on('datagrid:mouseover', function(){
+            console.log(arguments);
+        }).on('datagrid:mouseleave', function(){
+            console.log(arguments);
+        });
 
 
 
