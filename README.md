@@ -107,7 +107,7 @@ feather2引入
 | 选项 | 默认值 | 必填 | 说明 |
 |----------|----------|----------|----------|
 | columns | / | Y | 字段列名（Array）（key字段名，必填且唯一/label表头显示名称，必填/className样式class，选填/columns子类，选填），该字段可实现多个分类，key值不仅用于创建表头，还对应请求的数据相应的字段才可显示数据|
-| source | / | Y | 用于数据请求（Object）（ajaxUrl:请求路径，必填/dataSrc:请求的数据列表字段如（data.aData），必填/requestData:请求对象,选填）/dataTotal:请求的数据总数如（data.iTotal）/currentPageField:requestData的页码字段。dataTotal和 currentPageField需要pagerOptionsFormat属性才起作用|
+| source | / | Y | 用于数据请求（Object）（ajaxUrl:请求路径，必填/type:选填（post/get）/dataSrc:请求的数据列表字段如（data.aData），必填/requestData:请求对象,选填）/dataTotal:请求的数据总数如（data.iTotal）/currentPageField:requestData的页码字段。dataTotal和 currentPageField需要pagerOptionsFormat属性才起作用|
 | pagerOptionsFormat | / | N | 页码对象（function）返回必须是对象，且有属性perPage（每页数量） |
 | scrollY | / | N | 表格高度且滚动（int） |
 | scrollX | false | N | 是否横向滚动 （boolean）|

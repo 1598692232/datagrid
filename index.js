@@ -414,6 +414,7 @@
             /*将自定于方法赋予dataTable*/
             dtDefaultOpt.ajax.url = opt.source.ajaxUrl;
             dtDefaultOpt.ajax.data = opt.source.requestData;
+            dtDefaultOpt.ajax.type = opt.source.type? opt.source.type:"get";
             dtDefaultOpt.ajax.dataSrc = opt.source.dataSrc;
             // dtDefaultOpt.aoColumns=dtDefaultOpt.aoColumns;
             if (opt.fixedColumns && opt.fixedColumns.length > 0) {
