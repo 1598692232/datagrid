@@ -1,7 +1,7 @@
 ;(function (factory) {
     if (typeof define == 'function' && define.amd) {
         //seajs or requirejs environment
-        define(['jquery', 'class', 'pager', 'legoland', "./dataTables.js", "./dataTables.fixedColumns.min.js"], factory);
+        define(['jquery', 'class', 'pager', 'legoland', "./jquery.dataTables.js", "./dataTables.fixedColumns.min.js"], factory);
     } else if (typeof module === 'object' && typeof module.exports == 'object') {
         module.exports = factory(
             require('jquery'),
