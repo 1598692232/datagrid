@@ -120,7 +120,7 @@ feather2引入
 | datagrid:success | 渲染成功 |
 |datagrid:error| 渲染失败 |
  datagrid:mouseleave |鼠标滑上事件 (回调参数colObj,colNode,allColNodes)|
- mouseleave |鼠标离开事件（回调参数allColNodes） |
+ datagrid:mouseleave |鼠标离开事件（回调参数allColNodes） |
 
 
 
