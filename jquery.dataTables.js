@@ -57,10 +57,10 @@
 	}
 	else {
 		// Browser
-		factory( jQuery, window, document );
+		factory( jQuery );
 	}
 }
-(function( $, window, document, undefined ) {
+(function( $, undefined ) {
 	"use strict";
 
 	/**
