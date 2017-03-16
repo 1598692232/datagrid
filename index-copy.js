@@ -1,7 +1,7 @@
 ;(function (factory) {
     if (typeof define == 'function' && define.amd) {
         //seajs or requirejs environment
-        define(['jquery', 'class', 'pager', 'legoland', "./dataTables.js", "./dataTables.fixedColumns.min.js"], factory);
+        define(['jquery', 'class', 'pager', 'legoland', "./jquery.dataTables.js", "./dataTables.fixedColumns.min.js"], factory);
     } else if (typeof module === 'object' && typeof module.exports == 'object') {
         module.exports = factory(
             require('jquery'),
@@ -284,27 +284,6 @@
         }
     };
 
-
-    /*暴露方法*/
-    var ds={
-        dataGrid:"",
-        dom:"",
-        dataTable:"",
-        ajaxJson:"",
-        init:function(ele,option){
-            this.dataGrid=new datagrid(ele,option);
-            return this;
-        },
-        destroy:function(){
-            console.log(111111111);
-            this.dom.html("");
-            this.dataGrid="";
-            this.dom="";
-            this.ajaxJson="";
-            return this;
-        },
-    };
-
     return Class.$factory('datagrid', {
         initialize: function (option) {
             this.ele = $(option.dom) ;
@@ -319,7 +298,6 @@
                 ds: '',
                 tableHeader:""
             };
-            // console.log(_self.opt,88888);
 
             this.newOpt = dtValidate.filter.call(this, option);
 
@@ -334,7 +312,6 @@
             /*深克隆*/
             // this.newOpt.everyColsObj = JSON.parse(JSON.stringify(dtValidate.everyColsObj));
             this.opt.beginOption.everyColsObj = dtValidate.cloneCurrentObj(dtValidate.everyColsObj, this.newOpt.everyColsObj);
-            //console.log(this.newOpt);
             // this.opt.newColumns=dtValidate.rowIndexArgs;
 
             /*深克隆*/
@@ -373,7 +350,7 @@
                     trHtml +
                     '</thead>' +
                     '</table>' +
-                    '<div id="pager"></div>';
+                    '<div class="pager"></div>';
             }
 
             ele.html(defo.tableHeader);
@@ -437,6 +414,7 @@
             /*将自定于方法赋予dataTable*/
             dtDefaultOpt.ajax.url = opt.source.ajaxUrl;
             dtDefaultOpt.ajax.data = opt.source.requestData;
+            dtDefaultOpt.ajax.type = opt.source.type? opt.source.type:"get";
             dtDefaultOpt.ajax.dataSrc = opt.source.dataSrc;
             // dtDefaultOpt.aoColumns=dtDefaultOpt.aoColumns;
             if (opt.fixedColumns && opt.fixedColumns.length > 0) {
@@ -467,7 +445,7 @@
                 source = opt.beginOption.source;
 
 
-            ds.dataTable=this.dt = ele.find("table").DataTable(dtDefaultOpt);
+            this.dt = ele.find("table").DataTable(dtDefaultOpt);
             this.dt.on('xhr', function (){
                 var json =_self.dt.ajax.json();
                 var page = beginOption.pagerOptionsFormat ? beginOption.pagerOptionsFormat(json) : {};
@@ -509,13 +487,13 @@
             if (beginOption.pagerOptionsFormat) {
                 var ipageFeild = source.currentPageField ? source.currentPageField : "iPage";
 
-                $("#pager").pager({
+                ele.find(".pager").pager({
                     // total: page.total/page.perPage,
                     total: dataTotal / page.perPage,
                     current: source.requestData ? (source.requestData[ipageFeild] ? source.requestData[ipageFeild] : 1) : [],
                     showFirstBtn: false
                 }).on("pager:switch", function (event, index) {
-                    console.log(_self,4444);
+
                     beginOption.pagerOptionsFormat = function () {
                         return {
                             countPrePage: page.countPrePage,
@@ -528,8 +506,6 @@
 
                     source.requestData[ipageFeild] = index;
 
-                    // dg.destory(ele);
-                    // dg.destroy(dt);
                     _self.dt.destroy();
                     _self.dt.clear();
 
@@ -537,6 +513,10 @@
 
                 });
             }
+        },
+
+        destroy:function () {
+            this.ele.html("");
         }
     });
 

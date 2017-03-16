@@ -513,6 +513,10 @@
 
                 });
             }
+        },
+
+        destroy:function () {
+            this.ele.html("");
         }
     });
 
