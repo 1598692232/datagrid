@@ -70,6 +70,13 @@
                     format: v.format
                 };
 
+                /*过滤sort字段*/
+                // if(v.sort!="undefined"&&["asc","desc"].indexOf(v.sort.toLowerCase())>-1){
+                //     obj.sort=v.sort;
+                // }else{
+                //     obj.sort="asc";
+                // }
+
                 _self.everyColsObj.push(obj);
 
                 if (v.columns != undefined && v.columns instanceof Array && v.columns.length > 0) {
@@ -489,7 +496,7 @@
 
                 ele.find(".pager").pager({
                     // total: page.total/page.perPage,
-                    total: dataTotal / page.perPage,
+                    total: Math.ceil(dataTotal / page.perPage),
                     current: source.requestData ? (source.requestData[ipageFeild] ? source.requestData[ipageFeild] : 1) : [],
                     showFirstBtn: false
                 }).on("pager:switch", function (event, index) {
