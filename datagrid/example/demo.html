@@ -40,9 +40,22 @@
         $("#maingrid4").find("table").addClass('lg-table');
         $(".l-grid2").css({left:parseInt($(".l-grid2").position().left-5)+"px"});
 
-        $(".l-grid-body").each(function (k,d) {
-            $(d).
-        })
+        setTimeout(function () {
+            $(".l-grid-body").each(function (k,d) {
+
+                var $d=$(d);
+                $(d).find("td").each(function (i,dom) {
+                    var w=$(dom).width();
+                    console.log(w);
+                    console.log($(d),11);
+                    $d.parent().find(".l-grid-header td:eq("+i+")").css({width:w+"px"});
+                    console.log($(d).parent().find(".l-grid-header td:eq("+k+")"),22);
+                });
+                $d.find(".l-grid-body-inner").css({width:$d.find("table").width()+"px"})
+            });
+
+        },100);
+
 
     });
 
