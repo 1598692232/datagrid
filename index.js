@@ -437,7 +437,7 @@
             dtDefaultOpt.ajax.data = opt.source.requestData;
             dtDefaultOpt.ajax.type = opt.source.type? opt.source.type:"get";
             dtDefaultOpt.ajax.dataSrc = opt.source.dataSrc;
-            dtDefaultOpt.language.zeroRecords=opt.emptyTip;
+            dtDefaultOpt.language.emptyTable=opt.emptyTip;
             // dtDefaultOpt.aoColumns=dtDefaultOpt.aoColumns;
             if (opt.fixedColumns && opt.fixedColumns.length > 0) {
                 dtDefaultOpt.fixedColumns = {
