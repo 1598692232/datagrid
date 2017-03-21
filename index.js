@@ -480,7 +480,7 @@
 
             }).on('error', function(){
                 /*修改dataTable报错方法，防止弹框报错*/
-                 self.trigger('error');
+                 _self.trigger('error');
             }).on('mouseover', 'td', function(){
                 var lastIdx=null;
                 if(_self.dt.cell(this).index()!=undefined){
@@ -489,7 +489,10 @@
                 }
             }).on('mouseleave', function(fn){
                 _self.trigger('mouseleave', _self.dt.cells().nodes());
-            }).on( 'draw.dt', function () {
+            });
+                // .on( 'draw.dt', function () {
+
+
                 /*处理两个头的问题*/
                 // setTimeout(function (){
                 //     // _self.ele.find("table:eq(1)").removeClass("hides");
@@ -500,7 +503,7 @@
                 //     })
                 // },10);
                 // _self.ele.find(".lg-table:eq(1) thead td").removeClass("sort-up sort-down");
-            } );;
+            // } );;
 
             // if(ele.find("table").length>2){
             //     ele.find("table").eq(1).find("thead>tr").css({height:0})
