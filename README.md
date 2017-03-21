@@ -111,6 +111,7 @@ feather2引入
 | pagerOptionsFormat | / | N | 页码对象（function）返回必须是对象，且有属性perPage（每页数量） |
 | scrollY | / | N | 表格高度且滚动（int） |
 | scrollX | false | N | 是否横向滚动 （boolean）|
+| emptyTip | No data available in table | N | 没有数据提示语 （string）|
 | fixedColumns | /| N | 列固定（array）如[1,2],左边第一列，右边第一第二列不能滚动 |
 
 ## 事件

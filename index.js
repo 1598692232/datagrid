@@ -399,7 +399,8 @@
                 ajax: {},
                 searching: false,
                 destroy: true,
-                aoColumns: []
+                aoColumns: [],
+                language:{}
             };
 
             var dtDefaultOpt = opt.dtDefaultOpt;
@@ -436,6 +437,7 @@
             dtDefaultOpt.ajax.data = opt.source.requestData;
             dtDefaultOpt.ajax.type = opt.source.type? opt.source.type:"get";
             dtDefaultOpt.ajax.dataSrc = opt.source.dataSrc;
+            dtDefaultOpt.language.zeroRecords=opt.emptyTip;
             // dtDefaultOpt.aoColumns=dtDefaultOpt.aoColumns;
             if (opt.fixedColumns && opt.fixedColumns.length > 0) {
                 dtDefaultOpt.fixedColumns = {
@@ -443,6 +445,7 @@
                     rightColumns: opt.fixedColumns[1] ? opt.fixedColumns[1] : 0
                 };
             }
+
 
             // dtDefaultOpt.fixedColumns=opt.fixedColumns;
             dtDefaultOpt.scrollY = opt.scrollY;
