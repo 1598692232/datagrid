@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../liger-common.css">
+    <link rel="stylesheet" href="../ligerui-grid.css">
+    <link rel="stylesheet" href="../../bower_components/pager/index.css" media="screen" title="no title" charset="utf-8">
+    <!--<link rel="stylesheet/less" href="../../bower_components/legoland/src/legoland.css" media="screen" title="no title" charset="utf-8">-->
+    <title>Title</title>
+</head>
+<body>
+<div id="maingrid4" style="margin: 0; padding: 0">
+</div>
+<div id="maingrid"></div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.3/less.min.js"></script>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="../../bower_components/class/index.js"></script>
+<script type="text/javascript" src="../../bower_components/pager/index.js"></script>
+<script src="../ligerui.all.js"></script>
+<script type="text/javascript" src="demo1.js"></script>
+<script type="text/javascript" src="treeData.js"></script>
+<script type="text/javascript">
+    var g;
+    $(function ()
+    {
+        g = $("#maingrid4").ligerGrid({
+            columns: [
+                {display: '主键', name: 'CustomerID', align: 'left', width: 120 } ,
+                { display: '公司名', name: 'CompanyName', minWidth: 60 },
+                { display: '联系名1', name: 'ContactName', width: 100, align: 'left', frozen: true },
+                { display: '联系名2', name: 'ContactName', width: 200, align: 'left' },
+                { display: '联系名3', name: 'ContactName', width: 200, align: 'left' },
+                { display: '联系名4', name: 'ContactName', width: 200, align: 'left', frozen: true },
+                { display: '城市', name: 'City', width: 200 }
+            ], data: CustomersData, pageSize: 10, sortName: 'CustomerID',
+            width: '98%', height: '98%',rownumbers:true,
+            fixedCellHeight:false
+        });
+        $("#pageloading").hide();
+        $("#maingrid4").find("table").addClass('lg-table');
+        $(".l-grid2").css({left:parseInt($(".l-grid2").position().left-5)+"px"})
+
+    });
+
+    $(".l-grid-hd-row")
+
+
+    var manager;
+    $(function ()
+    {
+        manager = $("#maingrid").ligerGrid({
+                    columns: [
+                        { display: '部门名', name: 'name', id: 'id1', width: 250, align: 'left' },
+                        { display: '部门标示', name: 'id', width: 250, type: 'int', align: 'left' },
+
+                        { display: '部门描述', name: 'remark', width: 250, align: 'left' }
+                    ], width: '100%', pageSizeOptions: [5, 10, 15, 20], height: '97%',
+                    data: TreeDeptData, alternatingRow: false, tree: { columnId: 'id1' }
+                }
+        );
+    });
+    function getParent()
+    {
+        var row = manager.getParent(manager.getSelectedRow());
+        alert(JSON.stringify(row));
+    }
+    function getSelected()
+    {
+        var row = manager.getSelectedRow();
+        if (!row) { alert('请选择行'); return; }
+        alert(JSON.stringify(row));
+    }
+    function getData()
+    {
+        var data = manager.getData();
+        alert(JSON.stringify(data));
+    }
+    function hasChildren()
+    {
+        var row = manager.getSelectedRowObj();
+        alert(manager.hasChildren(row));
+    }
+    function isLeaf()
+    {
+        var row = manager.getSelectedRowObj();
+        alert(manager.isLeaf(row));
+    }
+    function collapseAll()
+    {
+        manager.collapseAll();
+    }
+    function expandAll()
+    {
+        manager.expandAll();
+    }
+</script>
+</body>
+</html>
