@@ -19,6 +19,11 @@
     var CAN_FIELDS = ['columns', 'pagerOptionsFormat', 'source',
         'fixedColumns', 'columnDefs', 'aoColumns', 'scrollY', 'scrollX', 'dataTotal'];
     $.fn.dataTable.ext.errMode = function(){};
+    $.extend( $.fn.dataTable.defaults, {
+        "searching": false,
+        "ordering": false
+    } );
+
     /*为datagrid提供方法*/
     var dtValidate = {
         colsObj: {}, /*每列对象*/
@@ -71,18 +76,18 @@
                 };
 
                 /*过滤sort字段*/
-                if(v.sort!=undefined){
-                    if(v.sort===true){
-                        obj.sort="asc";
-                    }else if(["asc","desc"].indexOf(v.sort.toLowerCase())>-1){
-                        obj.sort=v.sort.toLowerCase();
-                    }else{
-                        obj.sort="asc";
-                    }
-
-                }else{
-                    obj.sort="";
-                }
+                // if(v.sort!=undefined){
+                //     if(v.sort===true){
+                //         obj.sort="asc";
+                //     }else if(["asc","desc"].indexOf(v.sort.toLowerCase())>-1){
+                //         obj.sort=v.sort.toLowerCase();
+                //     }else{
+                //         obj.sort="asc";
+                //     }
+                //
+                // }else{
+                //     obj.sort="";
+                // }
 
                 _self.everyColsObj.push(obj);
 
@@ -348,13 +353,12 @@
         init: function (ele, defo) {
             var _self = this;
 
-            console.log(defo.newColumns,8228);
             if( defo.tableHeader==""){
                 var trHtml = "";
                 for (var k in defo.newColumns) {
                     var tr = "<tr>";
                     defo.newColumns[k].forEach(function (v, m) {
-                        tr += "<td colspan='" + v.maxCol + "' rowspan='" + v.maxRow + "' class='sort-up" + v.className + "'>" + v.label + "</td>";
+                        tr += "<td colspan='" + v.maxCol + "' rowspan='" + v.maxRow + "' class='" + v.className + "'>" + v.label + "</td>";
                     });
                     tr += "</tr>";
                     trHtml += tr;
@@ -465,13 +469,12 @@
             // ele.find("table:eq(1)").addClass("hides");
 
             this.dt.on('xhr', function (){
+
                 var json =_self.dt.ajax.json();
-                var page = beginOption.pagerOptionsFormat ? beginOption.pagerOptionsFormat(json) : {};
                 /*获取页数属性*/
-
-
-
+                var page = beginOption.pagerOptionsFormat ? beginOption.pagerOptionsFormat(json) : {};
                 var dataTotal = eval('json.' + source.dataTotal);
+
                 _self.createPager(ele, opt, page, dataTotal,_self);
                 _self.trigger('success', json);
 
@@ -479,8 +482,8 @@
                 /*修改dataTable报错方法，防止弹框报错*/
                  self.trigger('error');
             }).on('mouseover', 'td', function(){
-                    var lastIdx=null;
-                if(_self.dt.cell(this).index().column!=undefined){
+                var lastIdx=null;
+                if(_self.dt.cell(this).index()!=undefined){
                     var colIdx = _self.dt.cell(this).index().column;
                     _self.trigger('mouseover', [colIdx, _self.dt.column( colIdx ).nodes(),_self.dt.cells().nodes()]);
                 }
@@ -488,15 +491,15 @@
                 _self.trigger('mouseleave', _self.dt.cells().nodes());
             }).on( 'draw.dt', function () {
                 /*处理两个头的问题*/
-                setTimeout(function (){
-                    // _self.ele.find("table:eq(1)").removeClass("hides");
-                    _self.ele.find(".DTFC_RightBodyLiner thead td").removeClass("sort-up sort-down");
-                    _self.ele.find(".DTFC_LeftBodyWrapper thead td").removeClass("sort-up sort-down");
-                    $(window).on("scroll",function(){
-
-                    })
-                },10);
-                _self.ele.find(".lg-table:eq(1) thead td").removeClass("sort-up sort-down");
+                // setTimeout(function (){
+                //     // _self.ele.find("table:eq(1)").removeClass("hides");
+                //     _self.ele.find(".DTFC_RightBodyLiner thead td").removeClass("sort-up sort-down");
+                //     _self.ele.find(".DTFC_LeftBodyWrapper thead td").removeClass("sort-up sort-down");
+                //     $(window).on("scroll",function(){
+                //
+                //     })
+                // },10);
+                // _self.ele.find(".lg-table:eq(1) thead td").removeClass("sort-up sort-down");
             } );;
 
             // if(ele.find("table").length>2){
