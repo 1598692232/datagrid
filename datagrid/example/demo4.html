@@ -120,7 +120,7 @@
     {
         var grid = document.createElement('div');
         $(detailPanel).append(grid);
-        $(grid).css('margin',10).ligerGrid({
+        var $grid=$(grid).css('margin',10).ligerGrid({
             columns:
                     [
                         { display: '订单序号', name: 'OrderID',type:'float',  },
@@ -130,11 +130,12 @@
                         { display: '收货城市', name: 'ShipCity'},
                         { display: '收货国家', name: 'ShipCountry' }
                     ], isScroll: false, showToggleColBtn: false, width: '100%',
-            data: f_getOrdersData(row.CustomerID) , showTitle: false, columnWidth: 100,
+              showTitle: false, columnWidth: 100,
         headerRowHeight:42, rowHeight:36,fixedCellHeight:42, rownumbers:false,
             usePager:false
             , onAfterShowData: callback,frozen:false
         });
+        $grid.set({data:f_getOrdersData(row.CustomerID)});
     }
 
 

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../liger-common.css">
+    <link rel="stylesheet" href="../ligerui-grid2.css">
+    <link rel="stylesheet" href="../cus/demo2.css">
+    <title>Title</title>
+</head>
+<body>
+<div class="main">
+    <div id="maingrid" style="margin: 0; padding: 0">
+    </div>
+</div>
+
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="../../bower_components/class/index.js"></script>
+<script type="text/javascript" src="../../bower_components/pager/index.js"></script>
+<script src="../ligerui.all.js"></script>
+<!--<script type="text/javascript" src="demo2.js"></script>-->
+<!--<script type="text/javascript" src="demo2.1.js"></script>-->
+<script type="text/javascript" src="demo1.js"></script>
+<script type="text/javascript" src="treeData.js"></script>
+
+<script src="../index.js"></script>
+
+<script>
+    $("#maingrid").datagrid({
+       /*
+       * columns列参数
+       * isScroll 是否滚动
+       * data 数据
+       * headerRowHeight 头部高度
+       * rowHeight 行高度
+       * fixedCellHeight 锁定咧高度
+       * usePager 为false
+       * showToggleColBtn 初始化是否展开
+       * sort 排序
+       * width 宽度
+       * height 高度
+       * */
+        columns: [
+            {
+                label:"", //列名
+                key:"",   //键名
+                columns:[], //多表头
+                sorts:true, //是否排序
+                width:"",  //宽度
+                fixed:false, //是否锁定
+                format:function (){  //自定义单元格
+
+                }
+            },
+            { display: '顾客', name: 'CustomerID', align: 'left' },
+            { display: '公司名', name: 'CompanyName',align:'left' },
+            { display: '联系人', name: 'ContactName' },
+            { display: '地址', name: 'Address' },
+            { display: '邮编', name: 'PostalCode' },
+            { display: '城市', name: 'City' }
+        ],
+    });
+</script>
+</body>
+</html>
