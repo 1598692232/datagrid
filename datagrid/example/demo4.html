@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../liger-common.css">
+    <link rel="stylesheet" href="../ligerui-grid2.css">
+    <link rel="stylesheet" href="../cus/demo2.css">
+    <!--<link rel="stylesheet" href="../../bower_components/pager/index.css" media="screen" title="no title" charset="utf-8">-->
+    <!--<link rel="stylesheet/less" href="../../bower_components/legoland/src/legoland.css" media="screen" title="no title" charset="utf-8">-->
+    <title>Title</title>
+</head>
+<style>
+    .main{
+        margin:20px 0;
+    }
+</style>
+<body>
+<div class="main">
+    <div id="maingrid" style="margin: 0; padding: 0">
+    </div>
+</div>
+<div class="main">
+    <div id="maingrid2"></div>
+</div>
+<div class="main">
+    <div id="maingrid3"></div>
+</div>
+<div class="main">
+    <div id="maingrid4"></div>
+</div>
+
+<!--<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.3/less.min.js"></script>-->
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="../../bower_components/class/index.js"></script>
+<script type="text/javascript" src="../../bower_components/pager/index.js"></script>
+<script src="../ligerui.all.js"></script>
+<script type="text/javascript" src="demo2.js"></script>
+<script type="text/javascript" src="demo2.1.js"></script>
+<script type="text/javascript">
+    var g;
+    $(function ()
+    {
+        f_showCustomers();
+    });
+    //显示顾客
+    function f_showCustomers()
+    {
+        g = $("#maingrid3").ligerGrid({
+            columns: [
+                { display: '顾客', name: 'CustomerID', align: 'left' },
+                { display: '公司名', name: 'CompanyName',align:'left' },
+                { display: '联系人', name: 'ContactName' },
+                { display: '地址', name: 'Address' },
+                { display: '邮编', name: 'PostalCode' },
+                { display: '城市', name: 'City' }
+            ],
+
+            isScroll: false, frozen:false,
+
+            pageSizeOptions: [3,10, 20, 30, 40, 50, 100],
+            data:CustomersData,
+            showTitle: false,width:'90%',columnWidth:120,
+            detail: { onShowDetail: f_showOrder },
+            onError: function (a, b)
+            {
+            },
+            onGroupExtend:function(){
+
+            },
+            onAfterAddRow:function () {
+
+            },
+            onLoadData:function(){
+                console.log("qeqeqweqeqweqewqweqwe");
+            }
+
+        });
+
+
+        var W=0;
+        $(".l-grid-body").each(function (k,d) {
+
+            var $d=$(d);
+
+            $(d).find(".l-grid-row:first td").each(function (i,dom) {
+                var w=$(dom).find(".l-grid-row-cell-inner").width();
+                var w1=$d.parent().find(".l-grid-header td:eq("+i+")").width();
+                //                console.log(w,w1);
+                if(w<w1){
+                    //                    console.log("w1");
+                    $(dom).find(".l-grid-row-cell-inner").css({width:w1+"pxt"});
+                    $d.parent().find(".l-grid-header td:eq("+i+") .l-grid-hd-cell-inner").css({width:w1+"px"});
+                    //                    console.log($(dom).find(".l-grid-row-cell-inner"),92929);
+
+                }else{
+                    //                    console.log("w");
+                    $(dom).find(".l-grid-row-cell-inner").css({width:w+"pxt"});
+                    $d.parent().find(".l-grid-header td:eq("+i+") .l-grid-hd-cell-inner").css({width:w+"px"});
+                    //                    console.log($d.parent().find(".l-grid-header td:eq("+i+") .l-grid-hd-cell-inner"))
+                }
+                $d.find(".l-grid-body-inner").css({width:$d.find("table").width()+"px"});
+                W=$d.find("table").width();
+            });
+        });
+
+
+    }
+    function f_getOrdersData(CustomerID)
+    {
+        var data = { Rows: [] };
+        for (var i = 0; i < AllOrdersData.Rows.length; i++)
+        {
+            if (AllOrdersData.Rows[i].CustomerID == CustomerID)
+                data.Rows.push(AllOrdersData.Rows[i]);
+        }
+        return data;
+    }
+    //显示顾客订单
+    function f_showOrder(row, detailPanel,callback)
+    {
+        var grid = document.createElement('div');
+        $(detailPanel).append(grid);
+        $(grid).css('margin',10).ligerGrid({
+            columns:
+                    [
+                        { display: '订单序号', name: 'OrderID',type:'float',  },
+                        { display: '运费', name: 'Freight',type:'float' },
+                        { display: '收货人', name: 'ShipName' ,width:200},
+                        { display: '收货地址', name: 'ShipAddress'},
+                        { display: '收货城市', name: 'ShipCity'},
+                        { display: '收货国家', name: 'ShipCountry' }
+                    ], isScroll: false, showToggleColBtn: false, width: '100%',
+            data: f_getOrdersData(row.CustomerID) , showTitle: false, columnWidth: 100,
+        headerRowHeight:42, rowHeight:36,fixedCellHeight:42, rownumbers:false,
+            usePager:false
+            , onAfterShowData: callback,frozen:false
+        });
+    }
+
+
+    var columns = [
+        { display: '公司名', name: 'CompanyName', minWidth: 60,width: "25%" },
+        { display: '联系名', name: 'ContactName' , align: 'left',width: "25%" }
+    ];
+
+    window['g'] =
+            $("#maingrid4").ligerGrid({
+                columns: [
+                        { display: '表头0', name: 'CustomerID', width: "25%" },
+                    { display: '表头1', columns: columns },
+                    { display: '表头2', name: 'CustomerID', width: "25%"}
+                    ], pageSize: 10, checkbox: true,
+                data: CustomersData2,
+                allowHideColumn:false,rownumbers:true,
+                width: '100%', height: '100%',
+                headerRowHeight:42, rowHeight:36,fixedCellHeight:42, rownumbers:false,
+                usePager:false
+            });
+</script>
+</body>
+</html>
+
+
+<script>
+
+</script>

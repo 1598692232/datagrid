@@ -1,0 +1,16 @@
+.l-grid-hd-cell-inner{
+    color:#fff;
+}
+.l-grid-header-table{
+    background-color: #464e78;
+}
+.l-grid-hd-cell,.l-grid-row-cell{
+    border: 0;
+}
+.l-grid-hd-cell-inner{
+    line-height: 42px;
+    /*height: 36px!important;*/
+}
+.l-grid1{
+    box-shadow: 3px 3px 2px #666
+}

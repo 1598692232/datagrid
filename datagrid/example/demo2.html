@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../liger-common.css">
+    <link rel="stylesheet" href="../ligerui-grid.css">
+    <link rel="stylesheet" href="../cus/demo.css">
+    <link rel="stylesheet" href="../../bower_components/pager/index.css" media="screen" title="no title" charset="utf-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="maingrid4"></div>
+<div id="maingrid5"></div>
+<!--<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.3/less.min.js"></script>-->
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="../../bower_components/class/index.js"></script>
+<script type="text/javascript" src="../../bower_components/pager/index.js"></script>
+<script src="../ligerui.all.js"></script>
+<script type="text/javascript" src="demo2.js"></script>
+<script type="text/javascript" src="demo2.1.js"></script>
+<script type="text/javascript" src="treeData.js"></script>
+<script>
+    var g;
+    $(function ()
+    {
+        f_showCustomers();
+    });
+    //显示顾客
+    function f_showCustomers()
+    {
+        g = $("#maingrid4").ligerGrid({
+            columns: [
+                { display: '顾客', name: 'CustomerID', align: 'left' },
+                { display: '公司名', name: 'CompanyName',align:'left' },
+                { display: '联系人', name: 'ContactName' },
+                { display: '地址', name: 'Address' },
+                { display: '邮编', name: 'PostalCode' },
+                { display: '城市', name: 'City' }
+            ],
+
+            isScroll: false, frozen:false,
+
+            pageSizeOptions: [3,10, 20, 30, 40, 50, 100],
+            data:CustomersData,
+            showTitle: false,width:'90%',columnWidth:120,
+            detail: { onShowDetail: f_showOrder },
+            onError: function (a, b)
+            {
+            },
+            onGroupExtend:function(){
+
+            },
+            onAfterAddRow:function () {
+
+            },
+            onLoadData:function(){
+                console.log("qeqeqweqeqweqewqweqwe");
+            }
+
+        });
+
+
+        var W=0;
+        $(".l-grid-body").each(function (k,d) {
+
+            var $d=$(d);
+
+            $(d).find(".l-grid-row:first td").each(function (i,dom) {
+                var w=$(dom).find(".l-grid-row-cell-inner").width();
+                var w1=$d.parent().find(".l-grid-header td:eq("+i+")").width();
+//                console.log(w,w1);
+                if(w<w1){
+//                    console.log("w1");
+                    $(dom).find(".l-grid-row-cell-inner").css({width:w1+"pxt"});
+                    $d.parent().find(".l-grid-header td:eq("+i+") .l-grid-hd-cell-inner").css({width:w1+"px"});
+//                    console.log($(dom).find(".l-grid-row-cell-inner"),92929);
+
+                }else{
+//                    console.log("w");
+                    $(dom).find(".l-grid-row-cell-inner").css({width:w+"pxt"});
+                    $d.parent().find(".l-grid-header td:eq("+i+") .l-grid-hd-cell-inner").css({width:w+"px"});
+//                    console.log($d.parent().find(".l-grid-header td:eq("+i+") .l-grid-hd-cell-inner"))
+                }
+                $d.find(".l-grid-body-inner").css({width:$d.find("table").width()+"px"});
+                W=$d.find("table").width();
+            });
+        });
+
+
+
+
+        setTimeout(function(){
+            $("#maingrid4").find(".l-grid-detailpanel-inner .l-grid-body").each(function (k,d) {
+                var $d=$(d);
+                $(d).find(".l-grid-row:first td").each(function (i,dom) {
+                    var w=$(dom).find(".l-grid-row-cell-inner").width();
+                    var w1=$d.parent().find(".l-grid-header td:eq("+i+")").width();
+                    if(w<w1){
+                        $(dom).find(".l-grid-row-cell-inner").css({width:w1+"px!important"});
+                    }else{
+                        $d.parent().find(".l-grid-header td:eq("+i+") .l-grid-hd-cell-inner").css({width:w+"px"});
+                    }
+                });
+//                $(".l-grid-detailpanel-inner").css({width:W+"px"});
+            });
+            setTimeout(function(){
+                $("#maingrid4").find(".l-grid-body").each(function (k,d) {
+                    var $d=$(d);
+                    var w=$d.find("table").width();
+                    $d.css({width:w+"px"});
+                    $d.parents(".l-panel-body").first().css({width:w+"px",margin:"0 auto"})
+                })
+            },10);
+
+        },3000);
+
+
+
+
+        setTimeout(function(){
+            $("#maingrid5").find(".l-grid-body").each(function (k,d) {
+                var $d = $(d);
+                var headerTd = [];
+                $d.parent().find(".l-grid-header td").each(function (m, o) {
+                    if ($(o).prop("colspan") == 1) {
+                        headerTd.push($(o));
+                    }
+                });
+
+                var headerTd2 = {}, idIndex = [];
+                headerTd.forEach(function (q, l) {
+
+                    var idArgs = q.prop("id").split("|");
+                    idIndex.push(idArgs[2]);
+                });
+                var idIndex2 = idIndex.sort();
+
+                idIndex2.forEach(function (o, m) {
+                    headerTd.forEach(function (q, l) {
+                        if(q.prop("id").indexOf(o)>-1){
+                            headerTd2[m]=q;
+                        }
+                    });
+
+                });
+                var wArgs={};
+                $(d).find(".l-grid-row:first td").each(function (i, dom) {
+                    var w = $(dom).find(".l-grid-row-cell-inner").width();
+                    var w1 = headerTd2[i].width();
+
+                    if (w < w1) {
+
+                        wArgs[i]=w1;
+
+                        $(dom).find(".l-grid-row-cell-inner").css({width: w1 + "px"});
+                        headerTd2[i].find(".l-grid-hd-cell-inner").css({width: w1 + "px"});
+                    } else {
+
+                        wArgs[i]=w;
+//                        l-grid-row-cell-inner
+                        headerTd2[i].find(".l-grid-hd-cell-inner").css({width: w + "px"});
+                        $(dom).find(".l-grid-row-cell-inner").css({width: w + "px"});
+                    }
+                });
+
+                $(d).find(".l-grid-row").each(function (i, dom) {
+                    $(dom).find("td").each(function(k,d){
+                        $(d).find(".l-grid-row-cell-inner").css({width:wArgs[k]+"px"});
+                    });
+                });
+
+//                $(".l-grid-detailpanel-inner").css({width: W + "px"});
+            });
+            setTimeout(function(){
+                $("#maingrid5").find(".l-grid-body").each(function (k,d) {
+                    var $d=$(d);
+                    var w=$d.find("table").width();
+                    $d.css({width:w+"px"});
+                    $d.parents(".l-panel-body").first().css({width:w+"px",margin:"0 auto"});
+                    $d.parents(".l-grid1").first().css({width:w+"px"});
+                    $d.parents(".l-grid").first().find(".l-grid2").first().css({width:w+"px"});
+                    $d.parents(".l-grid").first().find(".l-grid2 .l-grid-header-inner").first().css({width:w+"px"});
+
+                    var h1=$d.parents(".l-grid").first().find(".l-grid1 .l-grid-header").height();
+                    var h2=$d.parents(".l-grid").first().find(".l-grid2 .l-grid-header").height();
+                    console.log(h1,h2,8787);
+                    if(h1>h2){
+                        $d.parents(".l-grid").first().find(".l-grid1 .l-grid-header .l-grid-header-table").height(h1);
+                        $d.parents(".l-grid").first().find(".l-grid2 .l-grid-header .l-grid-header-table").height(h1);
+                    }else{
+                        $d.parents(".l-grid").first().find(".l-grid1 .l-grid-header .l-grid-header-table").height(h2);
+                        $d.parents(".l-grid").first().find(".l-grid2 .l-grid-header .l-grid-header-table").height(h2);
+                    }
+
+                });
+            },10);
+
+        },3000);
+
+
+        setTimeout(function(){
+            $("#maingrid4").find(".l-grid-detailpanel-inner .l-grid-body").each(function (k,d) {
+                var $d = $(d);
+                var headerTd = [];
+                $d.parent().find(".l-grid-header td").each(function (m, o) {
+                    if ($(o).prop("colspan") == 1) {
+                        headerTd.push($(o));
+                    }
+                });
+                console.log(headerTd);
+                var headerTd2 = {}, idIndex = [];
+                headerTd.forEach(function (q, l) {
+                    console.log(q.prop("id"));
+                    var idArgs = q.prop("id").split("|");
+                    idIndex.push(idArgs[2]);
+                });
+                var idIndex2 = idIndex.sort();
+                console.log(idIndex2);
+                idIndex2.forEach(function (o, m) {
+                    headerTd.forEach(function (q, l) {
+                        if(q.prop("id").indexOf(o)>-1){
+                            headerTd2[m]=q;
+                        }
+                    });
+
+                });
+                var wArgs={};
+                $(d).find(".l-grid-row:first td").each(function (i, dom) {
+                    var w = $(dom).find(".l-grid-row-cell-inner").width();
+                    var w1 = headerTd2[i].width();
+                    console.log(w, w1);
+                    if (w < w1) {
+                        console.log(w1,"w1");
+                        wArgs[i]=w1;
+                        console.log(  $(dom).find(".l-grid-row-cell-inner"));
+                        $(dom).find(".l-grid-row-cell-inner").css({width: w1 + "px"});
+                        headerTd2[i].find(".l-grid-hd-cell-inner").css({width: w1 + "px"});
+                    } else {
+                        console.log("w");
+                        console.log(i);
+                        wArgs[i]=w;
+                        //                        l-grid-row-cell-inner
+                        headerTd2[i].find(".l-grid-hd-cell-inner").css({width: w + "px"});
+                        $(dom).find(".l-grid-row-cell-inner").css({width: w + "px"});
+                    }
+                });
+
+                $(d).find(".l-grid-row").each(function (i, dom) {
+                    $(dom).find("td").each(function(k,d){
+                        $(d).find(".l-grid-row-cell-inner").css({width:wArgs[k]+"px"});
+                    });
+                });
+
+                //                $(".l-grid-detailpanel-inner").css({width: W + "px"});
+            });
+            setTimeout(function(){
+                $("#maingrid4").find(".l-grid-body").each(function (k,d) {
+//                    var $d=$(d);
+//                    var w=$d.find("table").width();
+//                    $d.css({width:w+"px"});
+//                    $d.parents(".l-panel-body").first().css({width:w+"px",margin:"0 auto"});
+
+
+                    var $d=$(d);
+                    var w=$d.find("table").width();
+                    $d.css({width:w+"px"});
+                    $d.parents(".l-panel-body").first().css({width:w+"px",margin:"0 auto"});
+                    $d.parents(".l-grid1").first().css({width:w+"px"});
+                    $d.parents(".l-grid").first().find(".l-grid2").first().css({width:w+"px"});
+                    $d.parents(".l-grid").first().find(".l-grid2 .l-grid-header-inner").first().css({width:w+"px"});
+
+                    var h1=$d.parents(".l-grid").first().find(".l-grid1 .l-grid-header").height();
+                    var h2=$d.parents(".l-grid").first().find(".l-grid2 .l-grid-header").height();
+                    console.log(h1,h2,8787);
+                    if(h1>h2){
+                        $d.parents(".l-grid").first().find(".l-grid1 .l-grid-header .l-grid-header-table").height(h1);
+                        $d.parents(".l-grid").first().find(".l-grid2 .l-grid-header .l-grid-header-table").height(h1);
+                    }else{
+                        $d.parents(".l-grid").first().find(".l-grid1 .l-grid-header .l-grid-header-table").height(h2);
+                        $d.parents(".l-grid").first().find(".l-grid2 .l-grid-header .l-grid-header-table").height(h2);
+                    }
+                })
+            },10);
+
+        },3000);
+
+
+
+    }
+    function f_getOrdersData(CustomerID)
+    {
+        var data = { Rows: [] };
+        for (var i = 0; i < AllOrdersData.Rows.length; i++)
+        {
+            if (AllOrdersData.Rows[i].CustomerID == CustomerID)
+                data.Rows.push(AllOrdersData.Rows[i]);
+        }
+        return data;
+    }
+    //显示顾客订单
+    function f_showOrder(row, detailPanel,callback)
+    {
+        var grid = document.createElement('div');
+        $(detailPanel).append(grid);
+        $(grid).css('margin',10).ligerGrid({
+            columns:
+                    [
+                        { display: '订单序号', name: 'OrderID',type:'float' },
+                        { display: '运费', name: 'Freight', width: 50,type:'float' },
+                        { display: '收货人', name: 'ShipName' },
+                        { display: '收货地址', name: 'ShipAddress' },
+                        { display: '收货城市', name: 'ShipCity' },
+                        { display: '收货国家', name: 'ShipCountry' }
+                    ], isScroll: false, showToggleColBtn: false, width: '90%',
+            data: f_getOrdersData(row.CustomerID) , showTitle: false, columnWidth: 100
+            , onAfterShowData: callback,frozen:false
+        });
+    }
+
+
+    var columns = [
+        { display: '公司名', name: 'CompanyName', minWidth: 60,width:140 },
+        { display: '联系名', name: 'ContactName' , align: 'left',width:140 }
+    ];
+
+        window['g'] =
+                $("#maingrid5").ligerGrid({
+                    columns: [{ display: '表头0', name: 'CustomerID', width: 120 }, { display: '表头1', columns: columns }, { display: '表头2', name: 'CustomerID', width: 100}], pageSize: 10, checkbox: true,
+                    data: CustomersData2,
+                    allowHideColumn:false,rownumbers:true,
+                    width: '100%', height: '100%'
+                });
+//
+//        $("#maingrid5").find(".l-grid-hd-cell").each(function (k,d) {
+//            console.log($(d).prop("colspan"),"colspan")
+//        })
+        $("#pageloading").hide();
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

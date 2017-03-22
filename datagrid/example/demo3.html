@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../liger-common.css">
+    <link rel="stylesheet" href="../ligerui-grid2.css">
+    <link rel="stylesheet" href="../cus/demo2.css">
+    <!--<link rel="stylesheet" href="../../bower_components/pager/index.css" media="screen" title="no title" charset="utf-8">-->
+    <!--<link rel="stylesheet/less" href="../../bower_components/legoland/src/legoland.css" media="screen" title="no title" charset="utf-8">-->
+    <title>Title</title>
+</head>
+<style>
+    .main{
+        margin:20px 0;
+    }
+</style>
+<body>
+<div class="main">
+    <div id="maingrid" style="margin: 0; padding: 0">
+    </div>
+</div>
+<div class="main">
+    <div id="maingrid2"></div>
+</div>
+<div class="main">
+    <div id="maingrid3"></div>
+</div>
+<div class="main">
+    <div id="maingrid4"></div>
+</div>
+
+<!--<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.3/less.min.js"></script>-->
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="../../bower_components/class/index.js"></script>
+<script type="text/javascript" src="../../bower_components/pager/index.js"></script>
+<script src="../ligerui.all.js"></script>
+<script type="text/javascript" src="demo1.js"></script>
+<script type="text/javascript" src="treeData.js"></script>
+<script type="text/javascript">
+    var g;
+    $(function ()
+    {
+        g = $("#maingrid").ligerGrid({
+            columns: [
+                {display: '主键', name: 'CustomerID', align: 'left', width: "15%"} ,
+                { display: '公司名', name: 'CompanyName', width:  "15%"},
+                { display: '联系名1', name: 'ContactName', width:  "15%", align: 'left', frozen: true },
+                { display: '联系名2', name: 'ContactName', width:  "15%", align: 'left' },
+                { display: '联系名3', name: 'ContactName', width:  "15%", align: 'left' },
+                { display: '联系名4', name: 'ContactName', width:  "15%", align: 'left', frozen: true },
+                { display: '城市', name: 'City', width:  "20%" }
+            ], data: CustomersData, pageSize: 10, sortName: 'CustomerID',
+            width: '100%', height: '98%',rownumbers:true,
+            fixedCellHeight:false,
+            headerRowHeight:42,
+            rowHeight:36,
+            rownumbers:false,
+            usePager:false
+        });
+        $("#pageloading").hide();
+//        $("#maingrid").find("table").addClass('lg-table');
+//        $(".l-grid2").css({left:parseInt($(".l-grid2").position().left-5)+"px"});
+
+
+        //            $(".l-grid-body").each(function (k,d) {
+        //
+        //                var $d=$(d);
+        //                $(d).find(".l-grid-row td").each(function (i,dom) {
+        //                    var w=$(dom).width();
+        //                    $d.parent().find(".l-grid-header td:eq("+i+")").css({width:w+"px"});
+        //                });
+        //                $d.find(".l-grid-body-inner").css({width:$d.find("table").width()+"px"})
+        //            });
+
+
+
+
+    });
+
+
+
+
+    var manager;
+    $(function ()
+    {
+        manager = $("#maingrid2").ligerGrid({
+                    columns: [
+                        { display: '部门名', name: 'name', id: 'id1', width: 250, align: 'left' },
+                        { display: '部门标示', name: 'id', width: 250, type: 'int', align: 'left' },
+
+                        { display: '部门描述', name: 'remark', width: 250, align: 'left' }
+                    ], width: '100%', pageSizeOptions: [5, 10, 15, 20], height: '97%',
+                    data: TreeDeptData, alternatingRow: false, tree: { columnId: 'id1', usePager:false}
+                }
+        );
+
+
+
+
+    });
+    function getParent()
+    {
+        var row = manager.getParent(manager.getSelectedRow());
+        alert(JSON.stringify(row));
+    }
+    function getSelected()
+    {
+        var row = manager.getSelectedRow();
+        if (!row) { alert('请选择行'); return; }
+        alert(JSON.stringify(row));
+    }
+    function getData()
+    {
+        var data = manager.getData();
+        alert(JSON.stringify(data));
+    }
+    function hasChildren()
+    {
+        var row = manager.getSelectedRowObj();
+        alert(manager.hasChildren(row));
+    }
+    function isLeaf()
+    {
+        var row = manager.getSelectedRowObj();
+        alert(manager.isLeaf(row));
+    }
+    function collapseAll()
+    {
+        manager.collapseAll();
+    }
+    function expandAll()
+    {
+        manager.expandAll();
+    }
+
+
+
+
+
+    var g;
+    $(function ()
+    {
+        f_showCustomers();
+    });
+    //显示顾客
+    function f_showCustomers()
+    {
+        g = $("#maingrid3").ligerGrid({
+            columns: [
+                { display: '顾客', name: 'CustomerID', align: 'left' },
+                { display: '公司名', name: 'CompanyName',align:'left' },
+                { display: '联系人', name: 'ContactName' },
+                { display: '地址', name: 'Address' },
+                { display: '邮编', name: 'PostalCode' },
+                { display: '城市', name: 'City' }
+            ],
+
+            isScroll: false, frozen:false,
+
+            pageSizeOptions: [3,10, 20, 30, 40, 50, 100],
+            data:CustomersData,
+            showTitle: false,width:'90%',columnWidth:120,
+            detail: { onShowDetail: f_showOrder },
+            onError: function (a, b)
+            {
+            },
+            onGroupExtend:function(){
+
+            },
+            onAfterAddRow:function () {
+
+            },
+            onLoadData:function(){
+                console.log("qeqeqweqeqweqewqweqwe");
+            }
+
+        });
+
+
+        var W=0;
+        $(".l-grid-body").each(function (k,d) {
+
+            var $d=$(d);
+
+            $(d).find(".l-grid-row:first td").each(function (i,dom) {
+                var w=$(dom).find(".l-grid-row-cell-inner").width();
+                var w1=$d.parent().find(".l-grid-header td:eq("+i+")").width();
+                //                console.log(w,w1);
+                if(w<w1){
+                    //                    console.log("w1");
+                    $(dom).find(".l-grid-row-cell-inner").css({width:w1+"pxt"});
+                    $d.parent().find(".l-grid-header td:eq("+i+") .l-grid-hd-cell-inner").css({width:w1+"px"});
+                    //                    console.log($(dom).find(".l-grid-row-cell-inner"),92929);
+
+                }else{
+                    //                    console.log("w");
+                    $(dom).find(".l-grid-row-cell-inner").css({width:w+"pxt"});
+                    $d.parent().find(".l-grid-header td:eq("+i+") .l-grid-hd-cell-inner").css({width:w+"px"});
+                    //                    console.log($d.parent().find(".l-grid-header td:eq("+i+") .l-grid-hd-cell-inner"))
+                }
+                $d.find(".l-grid-body-inner").css({width:$d.find("table").width()+"px"});
+                W=$d.find("table").width();
+            });
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+    function f_getOrdersData(CustomerID)
+    {
+        var data = { Rows: [] };
+        for (var i = 0; i < AllOrdersData.Rows.length; i++)
+        {
+            if (AllOrdersData.Rows[i].CustomerID == CustomerID)
+                data.Rows.push(AllOrdersData.Rows[i]);
+        }
+        return data;
+    }
+    //显示顾客订单
+    function f_showOrder(row, detailPanel,callback)
+    {
+        var grid = document.createElement('div');
+        $(detailPanel).append(grid);
+        $(grid).css('margin',10).ligerGrid({
+            columns:
+                    [
+                        { display: '订单序号', name: 'OrderID',type:'float' },
+                        { display: '运费', name: 'Freight', width: 50,type:'float' },
+                        { display: '收货人', name: 'ShipName' },
+                        { display: '收货地址', name: 'ShipAddress' },
+                        { display: '收货城市', name: 'ShipCity' },
+                        { display: '收货国家', name: 'ShipCountry' }
+                    ], isScroll: false, showToggleColBtn: false, width: '90%',
+            data: f_getOrdersData(row.CustomerID) , showTitle: false, columnWidth: 100
+            , onAfterShowData: callback,frozen:false
+        });
+    }
+
+
+    var columns = [
+        { display: '公司名', name: 'CompanyName', minWidth: 60,width:140 },
+        { display: '联系名', name: 'ContactName' , align: 'left',width:140 }
+    ];
+
+    window['g'] =
+            $("#maingrid4").ligerGrid({
+                columns: [{ display: '表头0', name: 'CustomerID', width: 120 }, { display: '表头1', columns: columns }, { display: '表头2', name: 'CustomerID', width: 100}], pageSize: 10, checkbox: true,
+                data: CustomersData2,
+                allowHideColumn:false,rownumbers:true,
+                width: '100%', height: '100%'
+            });
+</script>
+</body>
+</html>
+
+
+<script>
+
+</script>

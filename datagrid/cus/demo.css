@@ -1,0 +1,15 @@
+.l-grid2,.l-grid1{
+    overflow: auto;
+}
+.l-grid-detailpanel-inner .l-panel{
+    margin:10px auto!important;
+}
+.l-grid-detailpanel-inner{
+    width: 100%!important;
+}
+.l-grid-row-cell-inner{
+    width:100%
+}
+.l-grid-header-table{
+    background-color: #464e78;
+}
