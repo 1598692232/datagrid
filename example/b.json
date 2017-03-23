@@ -1,0 +1,53 @@
+
+{
+  "iTotal":100,
+  "data":{
+    "aData": [
+      {
+        "username": "Tiger Nixon",
+        "sex": "男",
+        "oldAge": "22",
+        "newAge": "20",
+        "tizhong1": "150kg",
+        "tizhong2": "150kg"
+      },
+      {
+        "username": "Tiger Nixon",
+        "sex": "男",
+        "oldAge": "23",
+        "newAge": "20",
+        "tizhong1": "150kg",
+        "tizhong2": "150kg"
+      },
+      {
+        "username": "Tiger Nixon",
+        "sex": "男",
+        "oldAge": "25",
+        "newAge": "20",
+        "tizhong1": "150kg",
+        "tizhong2": "150kg"
+      },
+      {
+        "username": "Tiger Nixon",
+        "sex": "男",
+        "oldAge": "27",
+        "newAge": "20",
+        "tizhong1": "150kg",
+        "tizhong2": "150kg"
+      },
+      {
+        "username": "Tiger Nixon",
+        "sex": "男",
+        "oldAge": "20",
+        "newAge": "20",
+        "tizhong1": "150kg",
+        "tizhong2": "150kg"
+      }
+
+    ]
+  }
+
+}
+
+
+

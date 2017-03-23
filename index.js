@@ -471,7 +471,7 @@
 
             // ele.find("table:eq(1)").addClass("hides");
 
-            this.dt.on('xhr', function (){
+            this.dt.on('xhr.dt', function (e, settings, jsons, xhr){
 
                 var json =_self.dt.ajax.json();
                 /*获取页数属性*/
@@ -479,7 +479,7 @@
                 var dataTotal = eval('json.' + source.dataTotal);
 
                 _self.createPager(ele, opt, page, dataTotal,_self);
-                _self.trigger('success', json);
+                _self.trigger('success', e, settings, jsons, xhr);
 
             }).on('error', function(){
                 /*修改dataTable报错方法，防止弹框报错*/
