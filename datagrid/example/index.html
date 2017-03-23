@@ -46,9 +46,7 @@
                 sort:true, //是否排序
                 width:"14.28%",  //宽度
                 fixed:false, //是否锁定
-                format:function (){  //自定义单元格
 
-                }
             },
             {
                 label:"公司名", //列名
@@ -56,9 +54,7 @@
                 sort:true, //是否排序
                 width:"14.28%",  //宽度
                 fixed:false, //是否锁定
-                format:function (){  //自定义单元格
 
-                }
             },
             {
                 label:"联系人", //列名
@@ -66,41 +62,15 @@
                 sort:true, //是否排序
                 width:"14.28%",  //宽度
                 fixed:false, //是否锁定
-                format:function (){  //自定义单元格
 
-                }
             },
             {
                 label:"地址", //列名
                 key:"Address",   //键名
                 sort:true, //是否排序
-                columns:[
-                    {
-                        label:"地址1", //列名
-                        key:"Address1",   //键名
-                        sort:true, //是否排序
-                        width:"14.28%",  //宽度
-                        fixed:false, //是否锁定
-                        format:function (){  //自定义单元格
-
-                        }
-                    },
-                    {
-                        label:"地址2", //列名
-                        key:"Address2",   //键名
-                        sort:true, //是否排序
-                        width:"14.28%",  //宽度
-                        fixed:false, //是否锁定
-                        format:function (){  //自定义单元格
-
-                        }
-                    },
-                ], //多表头
                 width:"14.28%",  //宽度
                 fixed:false, //是否锁定
-                format:function (){  //自定义单元格
 
-                }
             },
             {
                 label:"邮编", //列名
@@ -108,9 +78,7 @@
                 sort:true, //是否排序
                 width:"14.28%",  //宽度
                 fixed:false, //是否锁定
-                format:function (){  //自定义单元格
 
-                }
             },
             {
                 label:"城市", //列名
@@ -118,9 +86,6 @@
                 sort:true, //是否排序
                 width:"20%",  //宽度
                 fixed:false, //是否锁定
-                format:function (){  //自定义单元格
-
-                }
             },
 
         ],
@@ -135,9 +100,8 @@
                 iPager:4,
             },
             dataSrc:"data.aData",
-            dataTotal:"data.iTotal",
+            dataTotal:"iTotal",
             currentPageField:"iPager",
-
         }
 
     });

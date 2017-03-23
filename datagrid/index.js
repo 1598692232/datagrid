@@ -87,7 +87,13 @@
                 ligerOpt:{},
                 reqData:option.source.requestData||{},
                 url:option.source.ajaxUrl||"",
-                type:option.source.type||""
+                type:option.source.type||"",
+                totalField:option.source.dataTotal||"",
+                pagerConfig:{
+                    total: "",
+                    current: "",
+                    showFirstBtn: false
+                }
             };
 
             this.default.ligerOpt=_handleFilterOptions(option);
@@ -128,7 +134,7 @@
         createDataGrid:function (){
             var _self=this;
 
-            _self.ele.ligerGrid(_self.opt.ligerOpt);
+            _self.grid=_self.ele.ligerGrid(_self.opt.ligerOpt);
 
             _self.getTableData();
         },
@@ -139,14 +145,24 @@
         *  @param {String} type 请求类型
         *  @param {Function} fn 请求成功之后执行
         * */
-        getTableData:function(reqData,url,type,fn){
+        getTableData:function(){
             var  _self= this ;
+            console.log(_self.opt.url,13123);
+
             $.ajax({
-                type:_self.opt.url,
+                url:_self.opt.url,
+                type:_self.opt.type,
                 data:_self.opt.reqData,
                 dataType:"json",
                 success:function(data){
+                    console.log(data);
                     _self.trigger('xhrsuccess', data);
+                    _self.grid.set({data:data});
+                    // _self.grid.loadData();
+                    _self.opt.pagerConfig.total=Math.ceil(eval("data."+_self.opt.totalField) / page.perPage);
+
+
+                    // _self.createTablePager();
                 }
             })
         },
@@ -154,7 +170,16 @@
 
         /*创建pager*/
         createTablePager:function(){
+            var _self=this;
+            _self.ele.append("<div class='pager'></div>");
+            _self.ele.find(".pager").pager({
+                // total: page.total/page.perPage,
+                total: Math.ceil(dataTotal / page.perPage),
+                current: source.requestData ? (source.requestData[ipageFeild] ? source.requestData[ipageFeild] : 1) : [],
+                showFirstBtn: false
+            }).on("pager:switch", function (event, index) {
 
+            })
         },
 
 
