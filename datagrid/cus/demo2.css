@@ -14,3 +14,10 @@
 .l-grid1{
     box-shadow: 3px 3px 2px #666
 }
+.l-grid-header{
+    border:0;
+    background: none;
+}
+.l-grid-hd-cell-inner{
+    padding-top: 0!important;
+}

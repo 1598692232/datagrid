@@ -41,23 +41,105 @@
        * */
         columns: [
             {
-                label:"", //列名
-                key:"",   //键名
-                columns:[], //多表头
-                sorts:true, //是否排序
-                width:"",  //宽度
+                label:"顾客", //列名
+                key:"CustomerID",   //键名
+                sort:true, //是否排序
+                width:"14.28%",  //宽度
                 fixed:false, //是否锁定
                 format:function (){  //自定义单元格
 
                 }
             },
-            { display: '顾客', name: 'CustomerID', align: 'left' },
-            { display: '公司名', name: 'CompanyName',align:'left' },
-            { display: '联系人', name: 'ContactName' },
-            { display: '地址', name: 'Address' },
-            { display: '邮编', name: 'PostalCode' },
-            { display: '城市', name: 'City' }
+            {
+                label:"公司名", //列名
+                key:"CompanyName",   //键名
+                sort:true, //是否排序
+                width:"14.28%",  //宽度
+                fixed:false, //是否锁定
+                format:function (){  //自定义单元格
+
+                }
+            },
+            {
+                label:"联系人", //列名
+                key:"ContactName",   //键名
+                sort:true, //是否排序
+                width:"14.28%",  //宽度
+                fixed:false, //是否锁定
+                format:function (){  //自定义单元格
+
+                }
+            },
+            {
+                label:"地址", //列名
+                key:"Address",   //键名
+                sort:true, //是否排序
+                columns:[
+                    {
+                        label:"地址1", //列名
+                        key:"Address1",   //键名
+                        sort:true, //是否排序
+                        width:"14.28%",  //宽度
+                        fixed:false, //是否锁定
+                        format:function (){  //自定义单元格
+
+                        }
+                    },
+                    {
+                        label:"地址2", //列名
+                        key:"Address2",   //键名
+                        sort:true, //是否排序
+                        width:"14.28%",  //宽度
+                        fixed:false, //是否锁定
+                        format:function (){  //自定义单元格
+
+                        }
+                    },
+                ], //多表头
+                width:"14.28%",  //宽度
+                fixed:false, //是否锁定
+                format:function (){  //自定义单元格
+
+                }
+            },
+            {
+                label:"邮编", //列名
+                key:"PostalCode",   //键名
+                sort:true, //是否排序
+                width:"14.28%",  //宽度
+                fixed:false, //是否锁定
+                format:function (){  //自定义单元格
+
+                }
+            },
+            {
+                label:"城市", //列名
+                key:"City",   //键名
+                sort:true, //是否排序
+                width:"20%",  //宽度
+                fixed:false, //是否锁定
+                format:function (){  //自定义单元格
+
+                }
+            },
+
         ],
+
+        source: {
+            ajaxUrl:"./a.json" ,
+            type:"post",
+            requestData: {
+                a:"qeqwe",
+                id:"555",
+                name:"55kai",
+                iPager:4,
+            },
+            dataSrc:"data.aData",
+            dataTotal:"data.iTotal",
+            currentPageField:"iPager",
+
+        }
+
     });
 </script>
 </body>
