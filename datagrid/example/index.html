@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../liger-common.css">
     <link rel="stylesheet" href="../ligerui-grid2.css">
+    <link rel="stylesheet" href="../../bower_components/pager/index.css" media="screen" title="no title" charset="utf-8">
     <link rel="stylesheet" href="../cus/demo2.css">
     <title>Title</title>
 </head>
@@ -46,7 +47,6 @@
                 sort:true, //是否排序
                 width:"14.28%",  //宽度
                 fixed:false, //是否锁定
-
             },
             {
                 label:"公司名", //列名
@@ -76,8 +76,8 @@
                 label:"邮编", //列名
                 key:"PostalCode",   //键名
                 sort:true, //是否排序
+                fixed: true,
                 width:"14.28%",  //宽度
-                fixed:false, //是否锁定
 
             },
             {
@@ -98,11 +98,20 @@
                 id:"555",
                 name:"55kai",
                 iPager:4,
+                iPerPage:"12"
             },
-            dataSrc:"data.aData",
-            dataTotal:"iTotal",
+            dataRowsField:"data.aData",
+            dataTotalField:"Total",
+            perPager:"iPerPage",
             currentPageField:"iPager",
-        }
+        },
+
+        height:500,
+
+        scrollY:        100,
+        scrollX:        true,
+
+        fixedColumns:[1,1],
 
     });
 </script>

@@ -17,7 +17,7 @@
 })(function ($, Class) {
 
     var EVENTS=[],
-        OPT_FILTER_ARGS=['columns'],
+        OPT_LIGER_FILTER_ARGS=['columns','height'],
         LIGER_COLUMNS_OPT_NAMES={
             key:"name",
             label:"display",
@@ -38,7 +38,7 @@
 
         for (var i in needFilter){
 
-            if(OPT_FILTER_ARGS.indexOf(i)>-1){
+            if(OPT_LIGER_FILTER_ARGS.indexOf(i)>-1){
                 obj[i]=needFilter[i];
             }else{
                 continue;
@@ -78,6 +78,27 @@
         return obj;
     }
 
+    /*检查某个从参数是否为true
+    * @param {checkObj} 被检查的对象
+    * @param {field} 被检查的字段
+    * @param {field} 递归字段
+    * */
+    function _checkObjFieldIsTrue (checkObj,field,colField){
+        var fixed=false;
+        console.log(checkObj,field,colField)
+        for (var  i in checkObj){
+            if(i==colField&&colField.length>0){
+                isTrue=_checkObjFieldIsTrue(checkObj[i],"frozen","columns");
+            }else{
+                if(i==field && checkObj[i]==true){
+                    console.log(checkObj[i]);
+                    return true;
+                }
+            }
+        }
+    }
+
+
     return Class.$factory('datagrid', {
 
         initialize:function (option) {
@@ -88,7 +109,9 @@
                 reqData:option.source.requestData||{},
                 url:option.source.ajaxUrl||"",
                 type:option.source.type||"",
-                totalField:option.source.dataTotal||"",
+                totalField:option.source.dataTotalField||"",
+                perPager:option.source.perPager||"",
+                currentPagerField:option.source.currentPageField||"",
                 pagerConfig:{
                     total: "",
                     current: "",
@@ -98,9 +121,12 @@
 
             this.default.ligerOpt=_handleFilterOptions(option);
 
+
+
             this.handleOptColumns();
 
             this.opt = $.extend({}, this.default,option);
+
             this.createDataGrid();
         },
 
@@ -108,11 +134,11 @@
         handleOptColumns:function(){
 
             var styleObj={
-                // rowHeight:36,
+                rowHeight:36,
                 usePager:false,
                 headerRowHeight:42,
-                width: '100%',
-                height: '100%'
+                // width: '100%',
+                // height: 500
             };
 
             this.default.ligerOpt= $.extend({}, this.default.ligerOpt,styleObj);
@@ -120,6 +146,8 @@
             for ( var i in this.default.ligerOpt.columns){
                 this.default.ligerOpt.columns[i]=_optToLigerOpt(this.default.ligerOpt.columns[i]);
             }
+
+
 
         },
 
@@ -130,11 +158,28 @@
         },
 
 
+        /*检查是否有固定列*/
+        checkColumnsFixed:function (){
+            var fixed=false;
+            for ( var i in this.default.ligerOpt.columns) {
+                fixed=_checkObjFieldIsTrue(this.default.ligerOpt.columns[i], "frozen", "columns");
+                if(fixed)break;
+            }
+            console.log(fixed,92992);
+
+            if(fixed){
+                this.ele.find(".l-grid2").css({marginLeft:"3px"});
+            }
+        },
+
+
         /*创建table*/
         createDataGrid:function (){
             var _self=this;
 
             _self.grid=_self.ele.ligerGrid(_self.opt.ligerOpt);
+
+            this.checkColumnsFixed();
 
             _self.getTableData();
         },
@@ -155,14 +200,23 @@
                 data:_self.opt.reqData,
                 dataType:"json",
                 success:function(data){
-                    console.log(data);
+                    console.log(data,_self.opt.totalField ,_self.opt.perPager);
                     _self.trigger('xhrsuccess', data);
+
                     _self.grid.set({data:data});
                     // _self.grid.loadData();
-                    _self.opt.pagerConfig.total=Math.ceil(eval("data."+_self.opt.totalField) / page.perPage);
 
+                    var per="";
+                    if(parseInt(_self.opt.perPager)>0){
+                        per=_self.opt.perPager;
+                    }else{
+                        per=_self.opt.reqData[_self.opt.perPager];
+                    }
 
-                    // _self.createTablePager();
+                    _self.opt.pagerConfig.total=Math.ceil(eval("data."+_self.opt.totalField) / per);
+                    _self.opt.pagerConfig.current=_self.opt.reqData[_self.opt.currentPagerField];
+
+                    _self.createTablePager();
                 }
             })
         },
@@ -171,15 +225,17 @@
         /*创建pager*/
         createTablePager:function(){
             var _self=this;
-            _self.ele.append("<div class='pager'></div>");
-            _self.ele.find(".pager").pager({
-                // total: page.total/page.perPage,
-                total: Math.ceil(dataTotal / page.perPage),
-                current: source.requestData ? (source.requestData[ipageFeild] ? source.requestData[ipageFeild] : 1) : [],
-                showFirstBtn: false
-            }).on("pager:switch", function (event, index) {
+            if(_self.ele.children(".pager").length==0){
+                _self.ele.append("<div class='pager'></div>");
+            }
 
-            })
+            _self.ele.find(".pager")
+                .pager(_self.opt.pagerConfig)
+                .off("pager:switch")
+                .on("pager:switch", function (event, index) {
+                    _self.opt.reqData[_self.opt.currentPagerField]=index;
+                    _self.getTableData();
+                })
         },
 
 

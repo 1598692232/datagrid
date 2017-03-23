@@ -21,3 +21,6 @@
 .l-grid-hd-cell-inner{
     padding-top: 0!important;
 }
+.l-grid-row-cell-inner{
+    line-height: 36px;
+}
