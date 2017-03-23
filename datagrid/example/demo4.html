@@ -77,31 +77,31 @@
         });
 
 
-        var W=0;
-        $(".l-grid-body").each(function (k,d) {
-
-            var $d=$(d);
-
-            $(d).find(".l-grid-row:first td").each(function (i,dom) {
-                var w=$(dom).find(".l-grid-row-cell-inner").width();
-                var w1=$d.parent().find(".l-grid-header td:eq("+i+")").width();
-                //                console.log(w,w1);
-                if(w<w1){
-                    //                    console.log("w1");
-                    $(dom).find(".l-grid-row-cell-inner").css({width:w1+"pxt"});
-                    $d.parent().find(".l-grid-header td:eq("+i+") .l-grid-hd-cell-inner").css({width:w1+"px"});
-                    //                    console.log($(dom).find(".l-grid-row-cell-inner"),92929);
-
-                }else{
-                    //                    console.log("w");
-                    $(dom).find(".l-grid-row-cell-inner").css({width:w+"pxt"});
-                    $d.parent().find(".l-grid-header td:eq("+i+") .l-grid-hd-cell-inner").css({width:w+"px"});
-                    //                    console.log($d.parent().find(".l-grid-header td:eq("+i+") .l-grid-hd-cell-inner"))
-                }
-                $d.find(".l-grid-body-inner").css({width:$d.find("table").width()+"px"});
-                W=$d.find("table").width();
-            });
-        });
+//        var W=0;
+//        $(".l-grid-body").each(function (k,d) {
+//
+//            var $d=$(d);
+//
+//            $(d).find(".l-grid-row:first td").each(function (i,dom) {
+//                var w=$(dom).find(".l-grid-row-cell-inner").width();
+//                var w1=$d.parent().find(".l-grid-header td:eq("+i+")").width();
+//                //                console.log(w,w1);
+//                if(w<w1){
+//                    //                    console.log("w1");
+//                    $(dom).find(".l-grid-row-cell-inner").css({width:w1+"pxt"});
+//                    $d.parent().find(".l-grid-header td:eq("+i+") .l-grid-hd-cell-inner").css({width:w1+"px"});
+//                    //                    console.log($(dom).find(".l-grid-row-cell-inner"),92929);
+//
+//                }else{
+//                    //                    console.log("w");
+//                    $(dom).find(".l-grid-row-cell-inner").css({width:w+"pxt"});
+//                    $d.parent().find(".l-grid-header td:eq("+i+") .l-grid-hd-cell-inner").css({width:w+"px"});
+//                    //                    console.log($d.parent().find(".l-grid-header td:eq("+i+") .l-grid-hd-cell-inner"))
+//                }
+//                $d.find(".l-grid-body-inner").css({width:$d.find("table").width()+"px"});
+//                W=$d.find("table").width();
+//            });
+//        });
 
 
     }
@@ -118,6 +118,7 @@
     //显示顾客订单
     function f_showOrder(row, detailPanel,callback)
     {
+        console.log(row);
         var grid = document.createElement('div');
         $(detailPanel).append(grid);
         var $grid=$(grid).css('margin',10).ligerGrid({

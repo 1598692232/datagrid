@@ -112,6 +112,7 @@
                 totalField:option.source.dataTotalField||"",
                 perPager:option.source.perPager||"",
                 currentPagerField:option.source.currentPageField||"",
+                dataRowsField:option.source.dataRowsField||"",
                 pagerConfig:{
                     total: "",
                     current: "",
@@ -120,8 +121,6 @@
             };
 
             this.default.ligerOpt=_handleFilterOptions(option);
-
-
 
             this.handleOptColumns();
 
@@ -138,7 +137,8 @@
                 usePager:false,
                 headerRowHeight:42,
                 // width: '100%',
-                // height: 500
+                // height: 500,
+                detail: { onShowDetail: function(){} },
             };
 
             this.default.ligerOpt= $.extend({}, this.default.ligerOpt,styleObj);
@@ -147,13 +147,10 @@
                 this.default.ligerOpt.columns[i]=_optToLigerOpt(this.default.ligerOpt.columns[i]);
             }
 
-
-
         },
 
         /*处理参数source*/
         handleOptSource:function (){
-
 
         },
 
@@ -203,7 +200,11 @@
                     console.log(data,_self.opt.totalField ,_self.opt.perPager);
                     _self.trigger('xhrsuccess', data);
 
-                    _self.grid.set({data:data});
+                    var rows={
+                        Rows:eval("data."+_self.opt.dataRowsField)
+                    };
+
+                    _self.grid.set({data:rows});
                     // _self.grid.loadData();
 
                     var per="";
@@ -244,7 +245,7 @@
 
         },
 
-        /*时间监听*/
+        /*事件监听*/
         handleEvent:function () {
 
         }
