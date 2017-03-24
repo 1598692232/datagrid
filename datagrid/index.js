@@ -17,7 +17,7 @@
 })(function ($, Class) {
 
     var EVENTS=[],
-        OPT_LIGER_FILTER_ARGS=['columns','height','children'],
+        OPT_LIGER_FILTER_ARGS=['columns','height','children','tree'],
         LIGER_COLUMNS_OPT_NAMES={
             key:"name",
             label:"display",
@@ -25,8 +25,10 @@
             sort:"sort",
             width:"width",
             fixed:"frozen",
-            format:"render",
-            headerFormat:"headerRender"
+            id:"id",
+            align:"align",
+            format:"render"
+            // headerFormat:"headerRender"，
         },
         LIGER_OPT_NAMES=[];
 
@@ -37,8 +39,7 @@
         var obj={};
 
         for (var i in needFilter){
-
-            if($.inArray(i, OPT_LIGER_FILTER_ARGS) !== false){
+            if(OPT_LIGER_FILTER_ARGS.indexOf(i)>-1){
                 obj[i] = needFilter[i];
             }
         }
@@ -83,17 +84,17 @@
     * */
     function _checkObjFieldIsTrue (checkObj,field,colField){
         var fixed=false;
-        console.log(checkObj,field,colField)
+
         for (var  i in checkObj){
             if(i==colField&&colField.length>0){
-                isTrue=_checkObjFieldIsTrue(checkObj[i],"frozen","columns");
+                fixed=_checkObjFieldIsTrue(checkObj[i],"frozen","columns");
             }else{
                 if(i==field && checkObj[i]==true){
-                    console.log(checkObj[i]);
-                    return true;
+                    fixed= true;
                 }
             }
         }
+        return fixed;
     }
 
 
@@ -129,23 +130,39 @@
 
         /*处理参数columns*/
         handleOptColumns:function(){
-
+            var _self=this;
             var ligerObj={
                 rowHeight:36,
                 usePager:false,
                 headerRowHeight:42,
                 width: '100%',
                 // height: 500,
-                detail: {onShowDetail:this.default.ligerOpt.children},
-
-
-                columnWidth: 100
+                detail: {
+                            onShowDetail:function(row, detailPanel,callback) {
+                                console.log(_self.opt.ligerOpt,22222222);
+                                _self.opt.ligerOpt.children.showDetail(row, detailPanel,callback);
+                                _self.trigger("showDetail",row, detailPanel,callback);
+                            },
+                            onCollapse:function(data){
+                                _self.opt.ligerOpt.children.closeDetail(event,data);
+                                _self.trigger("closeDetail",event,data);
+                            }
+                        },
+                tree: {onShowDetail:this.default.ligerOpt.tree},
+                onAfterShowData:function(event,data){
+                    _self.trigger("aftershowdata",event,data);
+                },
+                onBeforeShowData:function(event,data){
+                    _self.trigger("onbeforeshowdata",event,data);
+                }
+                // columnWidth: 100
             };
+
 
             this.default.ligerOpt= $.extend(true,{}, this.default.ligerOpt,ligerObj);
 
-            delete this.default.ligerOpt.children;
-            console.log(this.default.ligerOpt);
+            // delete this.default.ligerOpt.children;
+            // console.log(this.default.ligerOpt);
 
             for ( var i in this.default.ligerOpt.columns){
                 this.default.ligerOpt.columns[i]=_optToLigerOpt(this.default.ligerOpt.columns[i]);
@@ -167,7 +184,6 @@
                 if(fixed)break;
             }
 
-            console.log(fixed,92992);
 
             if(fixed){
                 this.ele.find(".l-grid2").css({marginLeft:"3px"});
@@ -186,15 +202,9 @@
 
         },
 
-        /*ajax请求
-        *  @param {Object} reqData 请求参数
-        *  @param {String} url 请求链接
-        *  @param {String} type 请求类型
-        *  @param {Function} fn 请求成功之后执行
-        * */
+        /*ajax请求 */
         getTableData:function(){
             var  _self= this ;
-            console.log(_self.opt,13123);
 
             $.ajax({
                 url:_self.opt.url,
@@ -203,13 +213,18 @@
                 dataType:"json",
                 success:function(data){
 
-                    console.log(data,_self.opt.totalField ,_self.opt.perPager,848484);
                     _self.trigger('xhrsuccess', data);
 
-                    var rows={
+                    var dataRow=_self.opt.dataRowsField!=undefined?_self.opt.dataRowsField:"";
+                    var rows =dataRow!=""?{
                         Rows:eval("data."+_self.opt.dataRowsField)
-                    };
-                    console.log(rows,54545445);
+                    }:{Row:{}};
+
+                    // console.log(_self.default.ligerOpt.tree,8888);
+                    if(_self.default.ligerOpt.tree.columnId!=undefined){
+                        rows.Rows[0].isextend = false;
+                    }
+
                     _self.grid.set({data:rows});
                     // _self.grid.loadData();
 
@@ -223,11 +238,13 @@
                     _self.opt.pagerConfig.total=Math.ceil(eval("data."+_self.opt.totalField) / per);
                     _self.opt.pagerConfig.current=_self.opt.reqData[_self.opt.currentPagerField];
 
+                    console.log(_self.opt.pagerConfig,333);
+
                     _self.createTablePager();
                 },
-                error:function (XMLHttpRequest, textStatus, errorThrown) {
-                    console.log(XMLHttpRequest, textStatus, errorThrown,7747474);
-                }
+                // error:function (XMLHttpRequest, textStatus, errorThrown) {
+                //     console.log(XMLHttpRequest, textStatus, errorThrown,7747474);
+                // }
             })
         },
 

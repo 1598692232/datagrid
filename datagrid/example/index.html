@@ -13,6 +13,11 @@
     <div id="maingrid" style="margin: 0; padding: 0">
     </div>
 </div>
+<div class="main">
+    <div id="maingrid2" style="margin: 0; padding: 0">
+    </div>
+</div>
+
 
 <script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript" src="../../bower_components/class/index.js"></script>
@@ -43,6 +48,16 @@
        * */
         columns: [
             {
+                label:"勾选", //列名
+                key:"checkBox",   //键名
+                sort:false, //是否排序
+                width:"5%",  //宽度
+                fixed:false, //是否锁定
+                format:function (row) {
+                    return  '<input type ="checkbox" rowid ="' + row.id + '">';
+                },
+            },
+            {
                 label:"顾客", //列名
                 key:"CustomerID",   //键名
                 sort:true, //是否排序
@@ -55,7 +70,6 @@
                 sort:true, //是否排序
                 width:"14.28%",  //宽度
                 fixed:false, //是否锁定
-
             },
             {
                 label:"联系人", //列名
@@ -86,7 +100,17 @@
                 key:"City",   //键名
                 sort:false, //是否排序
                 width:"20%",  //宽度
-                fixed:true, //是否锁定
+                fixed:false, //是否锁定
+            },
+            {
+                label:"操作", //列名
+                key:"do",   //键名
+                sort:false, //是否排序
+//                width:"10%",  //宽度
+                fixed:false, //是否锁定
+                format:function (row) {
+                    return  "<input type='text'/>"
+                }
             },
 
         ],
@@ -108,13 +132,25 @@
         },
 
         height:500,
-        children:f_showOrder
+        children:{
+            showDetail:function(row, detailPanel,callback){
+                f_showOrder(row, detailPanel,callback);
+            },
+            height:"auto",
+            closeDetail:function () {
+
+            }
+        }
 
 //        scrollY:        100,
 //        scrollX:        true,
 //
 //        fixedColumns:[1,1],
 
+    }).on("datagrid:aftershowdata",function (event,data) {
+        console.log(event,data,12345)
+    }).on("datagrid:onbeforeshowdata",function (event,data) {
+        console.log(event,data,23456)
     });
 
 
@@ -125,6 +161,7 @@
         var grid = document.createElement('div');
 //console.log($(detailPanel).parents(".l-grid").first().find(".l-grid2 >.l-grid-body-table"),18723123123819028390);
 //        $(detailPanel).parents(".l-grid").first().find(".l-grid2 > tbody").find(".l-grid-detailpanel-inner").eq(row.__index).append(grid);
+        $(detailPanel).append(grid);
         $(grid).css('margin',10).datagrid({
             columns:
                     [
@@ -167,6 +204,33 @@
 //            , onAfterShowData: callback,frozen:false
 //        });
     }
+
+
+    $("#maingrid2").datagrid({
+
+        columns: [
+            { label: '部门名', key: 'name', id: 'id1', width: 250, align: 'left' },
+            { label: '部门标示', key: 'id', width: 250, type: 'int', align: 'left' },
+
+            { label: '部门描述', key: 'remark', width: 250, align: 'left' }
+        ],
+        source: {
+            ajaxUrl:"./tree.json" ,
+            type:"post",
+            requestData: {
+                a:"qeqwe",
+                id:"555",
+                name:"55kai",
+                iPager:4,
+                iPerPage:"12"
+            },
+            dataRowsField:"Rows",
+            dataTotalField:"Total",
+            perPager:"iPerPage",
+            currentPageField:"iPager",
+        },
+        width: '100%',tree: { columnId: 'id1', usePager:false}
+    })
 </script>
 </body>
 </html>

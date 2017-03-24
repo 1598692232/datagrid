@@ -372,7 +372,7 @@
 }
 .l-grid-row-cell-inner
 {
-    text-align:center;line-height:22px; min-height:22px; _height:22px;
+    line-height:22px; min-height:22px; _height:22px;
     margin-left:3px; margin-right:3px; overflow:hidden;
 }
 .l-grid-row-cell-inner-fixedheight
