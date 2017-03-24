@@ -139,7 +139,6 @@
                 // height: 500,
                 detail: {
                             onShowDetail:function(row, detailPanel,callback) {
-                                console.log(_self.opt.ligerOpt,22222222);
                                 _self.opt.ligerOpt.children.showDetail(row, detailPanel,callback);
                                 _self.trigger("showDetail",row, detailPanel,callback);
                             },
@@ -220,7 +219,7 @@
                         Rows:eval("data."+_self.opt.dataRowsField)
                     }:{Row:{}};
 
-                    // console.log(_self.default.ligerOpt.tree,8888);
+                    console.log(_self.default.ligerOpt.tree,8888);
                     if(_self.default.ligerOpt.tree.columnId!=undefined){
                         rows.Rows[0].isextend = false;
                     }
@@ -238,7 +237,6 @@
                     _self.opt.pagerConfig.total=Math.ceil(eval("data."+_self.opt.totalField) / per);
                     _self.opt.pagerConfig.current=_self.opt.reqData[_self.opt.currentPagerField];
 
-                    console.log(_self.opt.pagerConfig,333);
 
                     _self.createTablePager();
                 },
