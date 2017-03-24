@@ -48,14 +48,14 @@
         g = $("#maingrid3").ligerGrid({
             columns: [
                 { display: '顾客', name: 'CustomerID', align: 'left' },
-                { display: '公司名', name: 'CompanyName',align:'left' },
+                { display: '公司名', name: 'CompanyName',align:'left' ,frozen:true},
                 { display: '联系人', name: 'ContactName' },
                 { display: '地址', name: 'Address' },
                 { display: '邮编', name: 'PostalCode' },
                 { display: '城市', name: 'City' }
             ],
 
-            isScroll: false, frozen:false,
+            isScroll: false,
 
             pageSizeOptions: [3,10, 20, 30, 40, 50, 100],
             data:CustomersData,

@@ -17,7 +17,7 @@
 })(function ($, Class) {
 
     var EVENTS=[],
-        OPT_LIGER_FILTER_ARGS=['columns','height'],
+        OPT_LIGER_FILTER_ARGS=['columns','height','children'],
         LIGER_COLUMNS_OPT_NAMES={
             key:"name",
             label:"display",
@@ -38,10 +38,8 @@
 
         for (var i in needFilter){
 
-            if(OPT_LIGER_FILTER_ARGS.indexOf(i)>-1){
-                obj[i]=needFilter[i];
-            }else{
-                continue;
+            if($.inArray(i, OPT_LIGER_FILTER_ARGS) !== false){
+                obj[i] = needFilter[i];
             }
         }
 
@@ -132,16 +130,22 @@
         /*处理参数columns*/
         handleOptColumns:function(){
 
-            var styleObj={
+            var ligerObj={
                 rowHeight:36,
                 usePager:false,
                 headerRowHeight:42,
-                // width: '100%',
+                width: '100%',
                 // height: 500,
-                detail: { onShowDetail: function(){} },
+                detail: {onShowDetail:this.default.ligerOpt.children},
+
+
+                columnWidth: 100
             };
 
-            this.default.ligerOpt= $.extend({}, this.default.ligerOpt,styleObj);
+            this.default.ligerOpt= $.extend(true,{}, this.default.ligerOpt,ligerObj);
+
+            delete this.default.ligerOpt.children;
+            console.log(this.default.ligerOpt);
 
             for ( var i in this.default.ligerOpt.columns){
                 this.default.ligerOpt.columns[i]=_optToLigerOpt(this.default.ligerOpt.columns[i]);
@@ -162,6 +166,7 @@
                 fixed=_checkObjFieldIsTrue(this.default.ligerOpt.columns[i], "frozen", "columns");
                 if(fixed)break;
             }
+
             console.log(fixed,92992);
 
             if(fixed){
@@ -175,10 +180,10 @@
             var _self=this;
 
             _self.grid=_self.ele.ligerGrid(_self.opt.ligerOpt);
-
             this.checkColumnsFixed();
 
             _self.getTableData();
+
         },
 
         /*ajax请求
@@ -189,7 +194,7 @@
         * */
         getTableData:function(){
             var  _self= this ;
-            console.log(_self.opt.url,13123);
+            console.log(_self.opt,13123);
 
             $.ajax({
                 url:_self.opt.url,
@@ -197,13 +202,14 @@
                 data:_self.opt.reqData,
                 dataType:"json",
                 success:function(data){
-                    console.log(data,_self.opt.totalField ,_self.opt.perPager);
+
+                    console.log(data,_self.opt.totalField ,_self.opt.perPager,848484);
                     _self.trigger('xhrsuccess', data);
 
                     var rows={
                         Rows:eval("data."+_self.opt.dataRowsField)
                     };
-
+                    console.log(rows,54545445);
                     _self.grid.set({data:rows});
                     // _self.grid.loadData();
 
@@ -218,6 +224,9 @@
                     _self.opt.pagerConfig.current=_self.opt.reqData[_self.opt.currentPagerField];
 
                     _self.createTablePager();
+                },
+                error:function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log(XMLHttpRequest, textStatus, errorThrown,7747474);
                 }
             })
         },

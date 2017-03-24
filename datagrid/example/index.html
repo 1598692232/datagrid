@@ -22,6 +22,7 @@
 <!--<script type="text/javascript" src="demo2.1.js"></script>-->
 <script type="text/javascript" src="demo1.js"></script>
 <script type="text/javascript" src="treeData.js"></script>
+<script type="text/javascript" src="AllOrdersData.js"></script>
 
 <script src="../index.js"></script>
 
@@ -83,9 +84,9 @@
             {
                 label:"城市", //列名
                 key:"City",   //键名
-                sort:true, //是否排序
+                sort:false, //是否排序
                 width:"20%",  //宽度
-                fixed:false, //是否锁定
+                fixed:true, //是否锁定
             },
 
         ],
@@ -107,13 +108,65 @@
         },
 
         height:500,
+        children:f_showOrder
 
-        scrollY:        100,
-        scrollX:        true,
-
-        fixedColumns:[1,1],
+//        scrollY:        100,
+//        scrollX:        true,
+//
+//        fixedColumns:[1,1],
 
     });
+
+
+    //显示子表格案例
+    function f_showOrder(row, detailPanel,callback)
+    {
+//        console.log(row, detailPanel,callback);
+        var grid = document.createElement('div');
+//console.log($(detailPanel).parents(".l-grid").first().find(".l-grid2 >.l-grid-body-table"),18723123123819028390);
+//        $(detailPanel).parents(".l-grid").first().find(".l-grid2 > tbody").find(".l-grid-detailpanel-inner").eq(row.__index).append(grid);
+        $(grid).css('margin',10).datagrid({
+            columns:
+                    [
+
+                        { label: '订单序号', key: 'OrderID', width:100 },
+                        { label: '运费', key: 'Freight',  width:100 },
+                        { label: '收货人', key: 'ShipName' , width:100 },
+                        { label: '收货地址', key: 'ShipAddress' ,  width:100},
+                        { label: '收货城市', key: 'ShipCity' ,  width:100},
+                        { label: '收货国家', key: 'ShipCountry' ,  width:100}
+                    ],
+            source: {
+                ajaxUrl:"./AllOrdersData.json" ,
+                type:"post",
+                requestData: {
+                    a:"qeqwe",
+                    id:"555",
+                    name:"55kai",
+                    iPager:4,
+                    iPerPage:"12"
+                },
+                dataRowsField:"Rows",
+                dataTotalField:"Total",
+                perPager:"iPerPage",
+                currentPageField:"iPager",
+            },
+
+        });
+//        $(grid).css('margin',10).ligerGrid({
+//            columns:
+//                    [
+//                        { display: '订单序号', name: 'OrderID',type:'float' },
+//                        { display: '运费', name: 'Freight', width: 50,type:'float' },
+//                        { display: '收货人', name: 'ShipName' },
+//                        { display: '收货地址', name: 'ShipAddress' },
+//                        { display: '收货城市', name: 'ShipCity' },
+//                        { display: '收货国家', name: 'ShipCountry' }
+//                    ], isScroll: false, showToggleColBtn: false, width: '90%',
+//            data: f_getOrdersData(row.CustomerID) , showTitle: false, columnWidth: 100
+//            , onAfterShowData: callback,frozen:false
+//        });
+    }
 </script>
 </body>
 </html>
