@@ -137,17 +137,6 @@
                 headerRowHeight:42,
                 width: '100%',
                 // height: 500,
-                detail: {
-                            onShowDetail:function(row, detailPanel,callback) {
-                                _self.opt.ligerOpt.children.showDetail(row, detailPanel,callback);
-                                _self.trigger("showDetail",row, detailPanel,callback);
-                            },
-                            onCollapse:function(data){
-                                _self.opt.ligerOpt.children.closeDetail(event,data);
-                                _self.trigger("closeDetail",event,data);
-                            }
-                        },
-                tree: {onShowDetail:this.default.ligerOpt.tree},
                 onAfterShowData:function(event,data){
                     _self.trigger("aftershowdata",event,data);
                 },
@@ -157,6 +146,23 @@
                 // columnWidth: 100
             };
 
+
+            if( _self.default.ligerOpt.children!=undefined){
+                ligerObj.detail={
+                    onShowDetail:function(row, detailPanel,callback) {
+                        _self.default.ligerOpt.children.showDetail(row, detailPanel,callback);
+                        _self.trigger("showDetail",row, detailPanel,callback);
+                    },
+                    onCollapse:function(data){
+                        _self.default.ligerOpt.children.closeDetail(event,data);
+                        _self.trigger("closeDetail",event,data);
+                    }
+                };
+            }
+
+            if(_self.default.ligerOpt.tree!=undefined){
+                ligerObj.tree= this.default.ligerOpt.tree;
+            }
 
             this.default.ligerOpt= $.extend(true,{}, this.default.ligerOpt,ligerObj);
 
@@ -220,7 +226,8 @@
                     }:{Row:{}};
 
                     console.log(_self.default.ligerOpt.tree,8888);
-                    if(_self.default.ligerOpt.tree.columnId!=undefined){
+
+                    if(_self.default.ligerOpt.tree!=undefined){
                         rows.Rows[0].isextend = false;
                     }
 
